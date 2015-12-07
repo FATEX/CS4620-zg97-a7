@@ -79,11 +79,11 @@ public class Bvh implements AccelStruct {
          }
          else {
         	 boolean left = intersectHelper(node.child[0], outRecord, rayIn, anyIntersection);
-//        	 IntersectionRecord temp = new IntersectionRecord();
-//        	 if (left) temp.set(outRecord);
+        	 IntersectionRecord temp = new IntersectionRecord();
+        	 if (left) temp.set(outRecord);
         	 
         	 boolean right = intersectHelper(node.child[1], outRecord, rayIn, anyIntersection);
-//        	 if (left && right && temp.t < outRecord.t) outRecord.set(temp);
+        	 if (left && right && temp.t < outRecord.t) outRecord.set(temp);
              return left || right;  
          }
 	}

@@ -75,6 +75,8 @@ public abstract class Shader {
         		(Math.cos(theta1) + refractiveIndex * Math.cos(theta2));
         
         double R = 0.5 * (Fp * Fp + Fs * Fs);
+        if (R < 0) return 0;
+        if (R > 1) return 1;
 		return R;
 	}
 }
