@@ -199,8 +199,8 @@ public class TestScreen extends GameScreen {
 		cameraIndex = 0;
 		
 		if (app.scene.objects.get("FireSphere")  != null) {
-			//fireObj = app.scene.objects.get("FireSphere").transformation.getTrans();
-			//app.scene.objects.get("FireSphere").addTranslation(new Vector3(0.01f, 0, 0));
+			System.out.println(fireObj.transformation);
+			fireObj = app.scene.objects.get("FireSphere");
 		}
 		rController = new RenderController(app.scene, new Vector2(app.getWidth(), app.getHeight()));
 		renderer.buildPasses(rController.env.root);
@@ -253,7 +253,7 @@ public class TestScreen extends GameScreen {
 		int curCamScroll = 0;
 
 		if (fireObj != null) {
-			fireObj.addTranslation(new Vector3(0.01f, 0, 0));
+			//fireObj.addTranslation(new Vector3(0.01f, 0, 0));
 		}
 			
 		if(Keyboard.isKeyDown(Keyboard.KEY_EQUALS)) curCamScroll++;
@@ -489,18 +489,25 @@ public class TestScreen extends GameScreen {
     	if(rController != null && rController.env.cameras.size() > 0) {
             RenderCamera cam = rController.env.cameras.get(cameraIndex);
             GLUniform.setST(program.getUniform("mModelViewProjection"), cam.mViewProjection, false);
-            //mParticleSystem.billboard(cam.mView);
+            mParticleSystem.billboard(cam.mView);
     	}
         
     }
     
     public void updateParticle(GameTime gameTime) {
         if(mParticleSystem.mPaused) return;
-        
+        if (fireObj != null) {
+    		System.out.println(fireObj.transformation);}
         if (this.mUnusedParticleSys.size() > 0 && Math.random() > 0.99) {
         	//System.out.println(this.mUnusedParticleSys.size());
         	ParticleSystem sys = this.mUnusedParticleSys.poll();
-        	sys.setPosition(new Vector3((float) (Math.random() - 0.5), (float) -0.5, 0));
+        	if (fireObj != null) {
+        		System.out.println(fireObj.transformation);
+        		sys.setPosition(new Vector3(fireObj.transformation.getTrans().x + 1, fireObj.transformation.getTrans().y, fireObj.transformation.getTrans().z));
+        	} else {
+        		sys.setPosition(new Vector3((float) (-1), (float) -0.5, 0));
+        	}
+        	
         	this.mUsingParticleSys.add(sys);
         }
         
