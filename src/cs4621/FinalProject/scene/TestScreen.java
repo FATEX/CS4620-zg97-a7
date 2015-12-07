@@ -199,7 +199,7 @@ public class TestScreen extends GameScreen {
 		cameraIndex = 0;
 		
 		if (app.scene.objects.get("FireSphere")  != null) {
-			System.out.println(fireObj.transformation);
+			//System.out.println(fireObj.transformation);
 			fireObj = app.scene.objects.get("FireSphere");
 		}
 		rController = new RenderController(app.scene, new Vector2(app.getWidth(), app.getHeight()));
@@ -497,7 +497,8 @@ public class TestScreen extends GameScreen {
     public void updateParticle(GameTime gameTime) {
         if(mParticleSystem.mPaused) return;
         if (fireObj != null) {
-    		System.out.println(fireObj.transformation);}
+    		//System.out.println(fireObj.transformation);
+        	}
         if (this.mUnusedParticleSys.size() > 0 && Math.random() > 0.99) {
         	//System.out.println(this.mUnusedParticleSys.size());
         	ParticleSystem sys = this.mUnusedParticleSys.poll();
