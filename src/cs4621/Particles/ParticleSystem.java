@@ -37,6 +37,7 @@ public class ParticleSystem {
     
     public Vector3 mPosition;
     public Vector3 mDirection;
+    
     private float mTimeSinceLastSpawn;
     
     private int totalNumParticles;
@@ -133,7 +134,13 @@ public class ParticleSystem {
     		Particle particle = this.mUnspawnedParticles.poll();
     		//(float)Math.random()*4 -2, (float)Math.random()*2 + 3, (float)Math.random()*4 - 2)
     		mDirection.normalize();
-    		Vector3 velocity = new Vector3((float)Math.random()*2 * 2 + mDirection.x, (float)Math.random()*2 + 2 + mDirection.y, (float)Math.random()*2 + 2 + mDirection.z);
+    		Vector3 ver = new Vector3();
+    		ver.set(mDirection.y + mDirection.z + 0, -mDirection.x + 0 -mDirection.z , 0-mDirection.x +mDirection.y);
+    		ver.normalize();
+    		ver.mul((float)Math.random()*2-1);
+    		//Vector3 velocity = new Vector3((float)Math.random()*2 + 2 + mDirection.x, (float)Math.random()*2 + 2 + mDirection.y, (float)Math.random()*2 + 2 + mDirection.z);
+    		Vector3 velocity = new Vector3(mDirection.clone().mul((float)Math.random()*2+1));
+    		velocity.add(ver);
     		particle.spawn(mass, mPosition, velocity);
     		this.mSpawnedParticles.add(particle);
     	}
@@ -153,13 +160,15 @@ public class ParticleSystem {
         while(it.hasNext()){
         	Particle p = it.next();
         	p.resetForces();
-        	Vector3 force = new Vector3(this.wind, -this.gravity*mass, 0);	
+        	//Vector3 force = new Vector3(this.wind, -this.gravity*mass, 0);	
         	//p.accumForce(force);
+        	Vector3 force = new Vector3(this.mDirection.clone().negate().mul(this.gravity*mass));
         	Vector3 dragForce = p.getVelocity().clone().mul(-this.drag);
         	force.add(dragForce);
         	p.accumForce(force);
         	p.animate(dt);
-        	if(p.getParticlePosition().y <= mPosition.y){
+        	double r2 = p.getParticlePosition().x * p.getParticlePosition().x + p.getParticlePosition().y * p.getParticlePosition().y + p.getParticlePosition().z * p.getParticlePosition().z;
+        	if(r2 <= 1){
         		this.mUnspawnedParticles.add(p);
         		it.remove();
         	}

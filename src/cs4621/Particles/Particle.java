@@ -51,6 +51,7 @@ public class Particle extends Mesh {
         mMass = mass;
         mPosition.set(initialPosition);
         mVelocity.set(initialVelocity);
+        //System.out.println("### spawn velovity" + this.mVelocity);
         mAge = 0.0f;
         
         return this;
@@ -126,6 +127,7 @@ public class Particle extends Mesh {
         // 4.) Update the particle's age.
     	Vector3 acc = this.mForcesThisFrame.clone().div(this.mMass);
     	this.mVelocity.add(acc.clone().mul(dt / 5));
+
     	this.mPosition.add(this.mVelocity.clone().mul(dt / 5));
     	this.mAge += dt;
     	
