@@ -1,12 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <scene>
-	
+	<mesh>
+	    <name>Teapot</name>
+	    <data>
+	      <file>data/meshes/rtm_rock_space.obj</file>
+	    </data>
+  	</mesh>
+
 	<texture>
 		<name>Earth1</name>
 		<data>
 			<file>data/textures/fire.jpg</file>
 		</data>
 	</texture>
+
+	<texture>
+		<name>Rock</name>
+		<data>
+			<file>data/scenes/Space Rock/rock_front_col.png</file>
+		</data>
+	</texture>
+
+	<material>
+		<name>Rock</name>
+		<data>
+			<type>Ambient</type>
+			<diffuse>
+				<texture>Rock</texture>
+			</diffuse>
+		</data>
+	</material>
 
 	<material>
 		<name>Earth</name>
@@ -56,6 +79,14 @@
 	</material>
 	
 	<object>
+		<name>SpaceRock</name>
+		<data>
+			
+			<material>Rock</material>
+		</data>
+	</object>
+
+	<object>
 		<name>FireSphere</name>
 		<data>
 			<mesh>Sphere</mesh>
@@ -69,7 +100,7 @@
 			<zPlanes>0.02 1000.0</zPlanes>
 			<perspective>0.01 0.01</perspective>
 			
-			<translation>0 0 100</translation>
+			<translation>0 0 10</translation>
 		</data>
 	</object>
 
