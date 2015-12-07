@@ -66,7 +66,7 @@ public class ParticleSystem {
         particleTexture = new GLTexture(TextureTarget.Texture2D, true);
         particleTexture.internalFormat = PixelInternalFormat.Rgba;
         try {
-            particleTexture.setImage2D("data/textures/Blur.png", false);
+            particleTexture.setImage2D("data/textures/BlurPreMul.png", false);
         } catch (Exception e) {
             System.out.println("Could not load particle texture.\r\n" + e.getMessage());
         }

@@ -349,7 +349,7 @@ public class TestScreen extends GameScreen {
 	
 	
 	
-private final int MAX_PARTICLES = 1024;
+	private final int MAX_PARTICLES = 1024;
     
     /* For calculating FPS */
     private final float FPS_ALPHA = 0.5f;
@@ -463,165 +463,8 @@ private final int MAX_PARTICLES = 1024;
         iBuf.put(new int[]{0, 1});
         iBuf.rewind();
         ibVelocities.setDataInitial(iBuf);
-        
-        // Initialize all of the controls.
-        initKeybindings();
-        initMouseControls();
-        
     }
     
-    /**
-     * Initialize mouse controls
-     *  Scroll         : zoom
-     *  Click and drag : rotate camera about origin.
-     */
-    private void initMouseControls() {
-        // Zoom in and out.
-        MouseEventDispatcher.OnMouseScroll.add(new ACEventFunc<MouseWheelEventArgs>() {
-            @Override
-            public void receive(Object sender, MouseWheelEventArgs args) {
-                mCameraRadius = Math.max(mCameraRadius + (float) args.ScrollChange * 0.01f, 0.0f);
-                updateCamera();
-            }
-        });
-        
-        MouseEventDispatcher.OnMousePress.add(new ACEventFunc<MouseButtonEventArgs>() {
-           @Override
-           public void receive(Object sender, MouseButtonEventArgs args) {
-               if(!mousePressed && args.button == MouseButton.Left) {
-                   mousePressed = true;
-               }
-               else if(args.button == MouseButton.Middle) {
-                   mCameraRadius    = 5.0f;
-                   mCameraLongitude = 0.0f;
-                   mCameraLatitude  = 0.0f;
-                   mCameraUp        = new Vector3(0, 1, 0);
-                   updateCamera();
-               }
-           }
-        });
-        
-        MouseEventDispatcher.OnMouseRelease.add(new ACEventFunc<MouseButtonEventArgs>() {
-            @Override
-            public void receive(Object sender, MouseButtonEventArgs args) {
-                if(args.button == MouseButton.Left) {
-                    mousePressed = false;
-                }
-            }
-         });
-        
-        MouseEventDispatcher.OnMouseMotion.add(new ACEventFunc<MouseMoveEventArgs>() {
-            @Override
-            public void receive(Object sender, MouseMoveEventArgs args) {
-                if(mousePressed) {
-                    /* Calculate dragged delta. */
-                    float deltaX = -((float) args.dx * 0.5f);
-                    float deltaY = -((float) args.dy * 0.5f);
-                    
-                    /* Update longitude, wrapping as necessary. */
-                    mCameraLongitude += deltaX;
-                    
-                    if (mCameraLongitude > 360.0f)
-                    {
-                        mCameraLongitude -= 360.0f;
-                    }
-                    else if (mCameraLongitude < 0.0f)
-                    {
-                        mCameraLongitude += 360.0f;
-                    }
-                    
-                    /* Update latitude, clamping as necessary. */
-                    if (Math.abs(mCameraLatitude + deltaY) <= 89.0f)
-                    {
-                        mCameraLatitude += deltaY;
-                    }
-                    else
-                    {
-                        mCameraLatitude = 89.0f * Math.signum(mCameraLatitude);
-                    }
-                
-                    updateCamera();
-                }
-            }
-        });
-    }
-    
-    /**
-     * Initialize all the key bindings.
-     */
-    private void initKeybindings() {
-        System.out.println("==========================================\n"
-                         + "           Keyboard controls: \n"
-                         + "==========================================\n"
-                         + " <Space> : Play/pause particle system.\n"
-                         + "    w    : Increase wind speed.\n"
-                         + "    q    : Decrease wind speed.\n"
-                         + "    d    : Increase drag.\n"
-                         + "    s    : Decrease drag.\n"
-                         + "    g    : Increase gravity.\n"
-                         + "    f    : Decrease gravity.\n"
-                         + "    r    : Reset particle system.\n"
-                         + "    v    : Display lines for velocity.\n"
-                         + "  <Tab>  : Toggle wireframes.\n"
-                         + "=========================================");
-        
-        KeyboardEventDispatcher.OnKeyPressed.add(new ACEventFunc<KeyboardKeyEventArgs>() {
-            @Override
-            public void receive(Object sender, KeyboardKeyEventArgs args) {
-                if(args.key == Keyboard.KEY_SPACE) {
-                    mParticleSystem.mPaused = !mParticleSystem.mPaused;
-                    if(mParticleSystem.mPaused)
-                        System.out.println("Simulation paused.");
-                    else
-                        System.out.println("Starting...");
-                }
-                else if(args.key == Keyboard.KEY_W) {
-                    mParticleSystem.wind += 1.0f;
-                    System.out.println("Wind = " + mParticleSystem.wind);
-                }
-                else if(args.key == Keyboard.KEY_Q) {
-                    mParticleSystem.wind -= 1.0f;
-                    System.out.println("Wind = " + mParticleSystem.wind);
-                }
-                else if(args.key == Keyboard.KEY_D) {
-                    mParticleSystem.drag += 1.0f;
-                    System.out.println("Drag = " + mParticleSystem.drag);
-                }
-                else if(args.key == Keyboard.KEY_S) {
-                    mParticleSystem.drag -= 1.0f;
-                    System.out.println("Drag = " + mParticleSystem.drag);
-                }
-                else if(args.key == Keyboard.KEY_G) {
-                    mParticleSystem.gravity += 1.0f;
-                    System.out.println("Gravity = " + mParticleSystem.gravity);
-                }
-                else if(args.key == Keyboard.KEY_F) {
-                    mParticleSystem.gravity -= 1.0f;
-                    System.out.println("Gravity = " + mParticleSystem.gravity);
-                }
-                else if(args.key == Keyboard.KEY_TAB) {
-                    showWireFrames = !showWireFrames;
-                    if(showWireFrames)
-                        System.out.println("Displaying wireframes");
-                    else
-                        System.out.println("No longer displaying wireframes");
-                }
-                else if(args.key == Keyboard.KEY_R) {
-                    System.out.println("Reset");
-                    mParticleSystem.reset();
-                }
-                else if(args.key == Keyboard.KEY_V) {
-                    showVelocities = !showVelocities;
-                    if(showVelocities)
-                        System.out.println("Displaying velocities");
-                    else
-                        System.out.println("No longer displaying velocities");
-                }
-            }
-        });
-    }
-    
-    //@Override
     public void destroyParticle(GameTime gameTime) {
         program.dispose();
         linesProgram.dispose();
@@ -643,32 +486,14 @@ private final int MAX_PARTICLES = 1024;
      * based on the camera's latitude, longitude, and radius from the lookAt point.
      */
     public void updateCamera() {
-        // Update the eye position.
-        mCameraPosition.set(0.0f, 0.0f, mCameraRadius);
-        Matrix4 rotation = Matrix4.createRotationY(mCameraLongitude * (float) Math.PI / 180.0f);
-        rotation.mulBefore(Matrix4.createRotationX(-mCameraLatitude  * (float) Math.PI / 180.0f));
-        mCameraPosition = rotation.mulPos(mCameraPosition);
+    	if(rController != null && rController.env.cameras.size() > 0) {
+            RenderCamera cam = rController.env.cameras.get(cameraIndex);
+            GLUniform.setST(program.getUniform("mModelViewProjection"), cam.mViewProjection, false);
+            //mParticleSystem.billboard(cam.mView);
+    	}
         
-        // Recalculate the up vector
-        mCameraUp.set(0, 1, 0);
-        mCameraUp = rotation.mulDir(mCameraUp).normalize();
-        Vector3 viewDir = mCameraPosition.clone().mul(-1).normalize();
-        Vector3 w       = viewDir.clone().cross(mCameraUp).normalize();
-        mCameraUp       = w.cross(viewDir).normalize();
-        
-        // Update the view projection matrix
-        mView              = Matrix4.createLookAt(mCameraPosition, new Vector3(0, 0, 0) /* lookAt */, mCameraUp);
-        Matrix4 projection = Matrix4.createPerspectiveFOV((float) (mCameraFOV * Math.PI / 180.0) /* FOV */, 
-                                                          mCameraViewSize.x / mCameraViewSize.y  /* Aspect ratio */, 
-                                                          mZPlanes.x, mZPlanes.y /* Clipping planes */);
-        
-        mViewProjection.set(mView).mulAfter(projection);
-        
-        // If a camera rotation has occurred, then we need to billboard again.
-        mParticleSystem.billboard(mView);
     }
     
-//    @Override
     public void updateParticle(GameTime gameTime) {
         if(mParticleSystem.mPaused) return;
         
@@ -749,8 +574,12 @@ private final int MAX_PARTICLES = 1024;
             
             program.use();
             {
+            	if(rController.env.cameras.size() > 0) {
+                    RenderCamera cam = rController.env.cameras.get(cameraIndex);
+                    GLUniform.setST(program.getUniform("mModelViewProjection"), cam.mViewProjection, false);
+            	}
                 // Pass over view projection matrix.
-                GLUniform.setST(program.getUniform("mModelViewProjection"), mViewProjection, false);
+            	else GLUniform.setST(program.getUniform("mModelViewProjection"), mViewProjection, false);
                 
                 // Bind the texture.
                 mParticleSystem.particleTexture.use(TextureUnit.Texture0, program.getUniform("particleTexture"));
