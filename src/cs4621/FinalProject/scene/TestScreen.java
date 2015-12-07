@@ -504,8 +504,11 @@ public class TestScreen extends GameScreen {
         	if (fireObj != null) {
         		System.out.println(fireObj.transformation);
         		sys.setPosition(new Vector3(fireObj.transformation.getTrans().x + 1, fireObj.transformation.getTrans().y, fireObj.transformation.getTrans().z));
+        		Vector3 velocity = new Vector3();
+        		sys.setInitDirection(new Vector3(fireObj.transformation.getTrans().x + 1, fireObj.transformation.getTrans().y, fireObj.transformation.getTrans().z));
         	} else {
         		sys.setPosition(new Vector3((float) (-1), (float) -0.5, 0));
+        		sys.setInitDirection(new Vector3(0f, 1f, 0f));
         	}
         	
         	this.mUsingParticleSys.add(sys);

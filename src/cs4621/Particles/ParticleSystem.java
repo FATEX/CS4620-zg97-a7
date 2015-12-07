@@ -36,6 +36,7 @@ public class ParticleSystem {
     public LinkedList<Particle> mSpawnedParticles = new LinkedList<Particle>();
     
     public Vector3 mPosition;
+    public Vector3 mDirection;
     private float mTimeSinceLastSpawn;
     
     private int totalNumParticles;
@@ -130,7 +131,10 @@ public class ParticleSystem {
     		this.mTimeSinceLastSpawn = 0;
     		this.currentSpawn++;
     		Particle particle = this.mUnspawnedParticles.poll();
-    		particle.spawn(mass, mPosition, new Vector3((float)Math.random()*4 -2, (float)Math.random()*2 + 3, (float)Math.random()*4 - 2));
+    		//(float)Math.random()*4 -2, (float)Math.random()*2 + 3, (float)Math.random()*4 - 2)
+    		mDirection.normalize();
+    		Vector3 velocity = new Vector3((float)Math.random()*2 * 2 + mDirection.x, (float)Math.random()*2 + 2 + mDirection.y, (float)Math.random()*2 + 2 + mDirection.z);
+    		particle.spawn(mass, mPosition, velocity);
     		this.mSpawnedParticles.add(particle);
     	}
     	
@@ -199,6 +203,10 @@ public class ParticleSystem {
     
     public void setPosition(Vector3 position) {
     	this.mPosition = position;
+    }
+    
+    public void setInitDirection(Vector3 direction) {
+    	this.mDirection = direction;
     }
     
     public Matrix4 getBillboardTransform() {
