@@ -66,15 +66,33 @@ public abstract class Shader {
 	protected double fresnel(Vector3d normal, Vector3d outgoing, double refractiveIndex) {
 		//TODO#A7 compute the fresnel term using the equation in the lecture
 		
-        double theta1 = normal.clone().angle(outgoing.clone());
-        double theta2 = Math.asin(1 * Math.sin(theta1) / refractiveIndex);
+//        double theta1 = normal.clone().angle(outgoing.clone());
+//        double theta2 = Math.asin(1 * Math.sin(theta1) / refractiveIndex);
+		double Fp = 0, Fs = 0;
+		
+		if(normal.clone().dot(outgoing) > 0) {
+            double costheta1 = normal.clone().normalize().dot(outgoing.clone().normalize());
+            double costheta2 = 1 - (1 - costheta1 * costheta1) / (refractiveIndex * refractiveIndex);
+            costheta2 = Math.sqrt(costheta2);                
+            Fp = (refractiveIndex * costheta1 - costheta2) /  
+        		    (refractiveIndex * costheta1 + costheta2);
+            Fs = (costheta1 - refractiveIndex * costheta2) / 
+        		    (costheta1 + refractiveIndex * costheta2);
+		}
+		else {
+			double costheta1 = normal.clone().normalize().negate().dot(outgoing.clone().normalize());
+            double costheta2 = 1 - (1 - costheta1 * costheta1) * (refractiveIndex * refractiveIndex);
+            costheta2 = Math.sqrt(costheta2);  
+            Fp = (costheta1 - refractiveIndex * costheta2) /  
+        		    (costheta1 + refractiveIndex * costheta2);
+            Fs = (refractiveIndex * costheta1 - costheta2) / 
+        		    (refractiveIndex * costheta1 + costheta2);
+		}
         
-        double Fp = (refractiveIndex * Math.cos(theta1) - Math.cos(theta2)) / 
-        		(refractiveIndex * Math.cos(theta1) + Math.cos(theta2));
-        double Fs = (Math.cos(theta1) - refractiveIndex * Math.cos(theta2)) / 
-        		(Math.cos(theta1) + refractiveIndex * Math.cos(theta2));
         
         double R = 0.5 * (Fp * Fp + Fs * Fs);
+        if(R < 0) return 0;
+        if(R > 1) return 1;
 		return R;
 	}
 }
