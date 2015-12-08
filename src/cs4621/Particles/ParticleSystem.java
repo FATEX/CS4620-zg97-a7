@@ -102,8 +102,8 @@ public class ParticleSystem {
             Particle particle = new Particle(data);
             
             // TODO:PPA3 Feel free to play with the color!
-            particle.setColor((double)247/256, 
-            					(double)143/256,
+            particle.setColor((double)1/256, 
+            					(double)255/256,
             					(double)7/256);
 
             
@@ -137,9 +137,19 @@ public class ParticleSystem {
     		Vector3 ver = new Vector3();
     		ver.set(mDirection.y + mDirection.z + 0, -mDirection.x + 0 -mDirection.z , 0-mDirection.x +mDirection.y);
     		ver.normalize();
-    		ver.mul((float)Math.random()*2-1);
+    		Vector3 velocity = new Vector3();
+    		if (totalTime < 5) {
+    			ver.mul((float)Math.random()* 0.5f - 0.25f);
+    			velocity.set((mDirection.clone().mul((float)Math.random()*0.5f + 1)));
+    		} else if (totalTime >=5 && totalTime < 12) {
+    			ver.mul((float)Math.random()*2 - 1);
+    			velocity.set((mDirection.clone().mul((float)Math.random()*2 + 1)));
+    		} else {
+    			ver.mul((float)Math.random()*1 - 0.5f);
+    			velocity.set((mDirection.clone().mul((float)Math.random()*0.5f + 1)));
+    		}
     		//Vector3 velocity = new Vector3((float)Math.random()*2 + 2 + mDirection.x, (float)Math.random()*2 + 2 + mDirection.y, (float)Math.random()*2 + 2 + mDirection.z);
-    		Vector3 velocity = new Vector3(mDirection.clone().mul((float)Math.random()*2+1));
+    		
     		velocity.add(ver);
     		particle.spawn(mass, mPosition, velocity);
     		this.mSpawnedParticles.add(particle);
@@ -168,12 +178,17 @@ public class ParticleSystem {
         	p.accumForce(force);
         	p.animate(dt);
         	double r2 = p.getParticlePosition().x * p.getParticlePosition().x + p.getParticlePosition().y * p.getParticlePosition().y + p.getParticlePosition().z * p.getParticlePosition().z;
-        	if(r2 <= 1){
+        	//System.out.println(r2);
+        	if(r2 <= 1 || r2 > 10){
         		this.mUnspawnedParticles.add(p);
         		it.remove();
         	}
         }
-        if (mSpawnedParticles.size() == 0) mFinished = true;
+        //System.out.println(mSpawnedParticles.size());
+        if (mSpawnedParticles.size() == 0) {
+        	this.totalTime = 0;
+        	mFinished = true;
+        }
         //ENDSOLUTION
     }
     

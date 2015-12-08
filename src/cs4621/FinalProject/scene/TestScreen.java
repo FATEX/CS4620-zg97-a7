@@ -90,11 +90,7 @@ public class TestScreen extends GameScreen {
 	TimelineViewer animTimeViewer = new TimelineViewer();
 	
 	SceneObject fireObj = new SceneObject();
-//	
-//	@Override
-//	public int getNext() {
-//		return getIndex();
-//	}
+	
     @Override
     public int getNext() {
 	        // Don't modify this method
@@ -292,7 +288,7 @@ public class TestScreen extends GameScreen {
 			updateAnimation = false;
 		}
 		
-		if (fireObj != null) updateParticle(gameTime);
+		if (app.scene.objects.get("FireSphere") != null) updateParticle(gameTime);
         
 	}
 	
@@ -342,17 +338,18 @@ public class TestScreen extends GameScreen {
 		
         GLError.get("draw");
         
-        if (fireObj != null) drawParticle(gameTime);
+        if (app.scene.objects.get("FireSphere") != null) drawParticle(gameTime);
 	}
 	
 	
 	
 	
 	private final int MAX_PARTICLES = 1024;
-    
+    private final int PARTICLE_SYSTEM_NUM = 1;
     /* For calculating FPS */
     private final float FPS_ALPHA = 0.5f;
     private float mFps = 0;
+    private int index = 0;
     
     /* Vertex shader inputs */
     private GLBuffer rasterVerts;
@@ -405,7 +402,7 @@ public class TestScreen extends GameScreen {
         app = (SceneApp)game;
 		
 		renderer = new Renderer();
-    	for (int i = 0; i < 2; i++) this.mUnusedParticleSys.add(new ParticleSystem(MAX_PARTICLES));
+    	for (int i = 0; i < PARTICLE_SYSTEM_NUM; i++) this.mUnusedParticleSys.add(new ParticleSystem(MAX_PARTICLES));
         // First create the programs: one for the particles, one for the wireframes.
         program = new GLProgram(false);
         program.quickCreateResource("particles", "cs4621/Particles/shaders/particles.vert", "cs4621/Particles/shaders/particles.frag", null);
@@ -496,38 +493,35 @@ public class TestScreen extends GameScreen {
     public void updateParticle(GameTime gameTime) {
         if(mParticleSystem.mPaused) return;
         
-        if (this.mUnusedParticleSys.size() > 0 && Math.random() > 0.99) {
-        	//System.out.println(this.mUnusedParticleSys.size());
-        	ParticleSystem sys = this.mUnusedParticleSys.poll();
+        createParticleSystems(gameTime);
+        //mParticleSystem.animate((float) gameTime.elapsed);
+    }
+    
+    public void createParticleSystems(GameTime gameTime) {
+    	if (index == 16) index = 0;
+    	
+    	while (mUnusedParticleSys.size() > 0 && Math.random() > 0.99) {
+    		ParticleSystem sys = this.mUnusedParticleSys.poll();
         	if (fireObj != null) {
-        		//System.out.println(fireObj.transformation);
-        		double theta = Math.random() * Math.PI / 2;
-        		double phi = Math.random() * Math.PI / 2;
-        		Vector3 pos = new Vector3(); 
-        		pos.set(fireObj.transformation.getTrans());
-        		Vector3 offset = new Vector3(
-        				(float) (Math.cos(theta) * Math.cos(phi)), 
-        				(float) Math.sin(theta), 
-        				(float) (Math.cos(theta) * Math.sin(phi))
-        				);
-        		pos.add(offset);
+        		Vector3 pos = createParticlePos(index);
         		sys.setPosition(pos);
-        		Vector3 velocity = new Vector3();
-        		sys.setInitDirection(new Vector3(fireObj.transformation.getTrans().x + 1, fireObj.transformation.getTrans().y, fireObj.transformation.getTrans().z));
+        		
+        		sys.setInitDirection(pos);
         	} else {
         		sys.setPosition(new Vector3((float) (-1), (float) -0.5, 0));
         		sys.setInitDirection(new Vector3(0f, 1f, 0f));
-        	}
-        	
+        	}	
         	this.mUsingParticleSys.add(sys);
-        }
-        
-        
+    	}
+    	
+    	index++;
+    	
         for (int i = 0; i < mUsingParticleSys.size(); i++) {
         	mUsingParticleSys.get(i).animate((float) gameTime.elapsed);
         }
         
         Iterator<ParticleSystem> it = this.mUsingParticleSys.iterator();
+        
         while(it.hasNext()){
         	ParticleSystem p = it.next();
         	if(p.mFinished){
@@ -537,9 +531,56 @@ public class TestScreen extends GameScreen {
         		it.remove();
         	}
         }
-        //mParticleSystem.animate((float) gameTime.elapsed);
     }
     
+    private Vector3 createParticlePos(int index) {
+    	Vector3 pos = new Vector3();
+    	pos.set(fireObj.transformation.getTrans());
+    	double theta = 0.0;
+    	double phi = 0.0;
+    	if (index < 2) {
+    		theta = Math.random() * Math.PI / 2;
+    		phi = Math.random() * Math.PI / 2;
+    		//theta = Math.random() * Math.PI / 2 + Math.PI * 3 / 2;
+    		//phi = Math.random() * Math.PI / 2 + Math.PI / 2;
+    	} else if (index < 4) {
+    		// 0 - pi / 2
+    		// -pi / 2 - 0
+    		theta = Math.random() * Math.PI / 2;
+    		phi = Math.random() * Math.PI / 2 + Math.PI / 2;
+    	} else if (index < 6) {
+    		theta = Math.random() * Math.PI / 2 + Math.PI / 2;
+    		phi = Math.random() * Math.PI / 2 + Math.PI;
+    	} else if (index < 8) {
+    		theta = Math.random() * Math.PI / 2 + Math.PI / 2;
+    		phi = Math.random() * Math.PI / 2 + Math.PI * 3 / 2;
+    	} else if (index < 10) {
+    		theta = Math.random() * Math.PI / 2 + Math.PI;
+    		phi = Math.random() * Math.PI / 2 + Math.PI;
+    	} else if (index < 12) {
+    		theta = Math.random() * Math.PI / 2 + Math.PI;
+    		phi = Math.random() * Math.PI / 2 + Math.PI * 3 / 2;
+    	} else if (index < 14) {
+    		theta = Math.random() * Math.PI / 2 + Math.PI * 3 / 2;
+    		phi = Math.random() * Math.PI / 2;
+    	} else if (index < 16) {
+    		theta = Math.random() * Math.PI / 2 + Math.PI * 3 / 2;
+    		phi = Math.random() * Math.PI / 2 + Math.PI / 2;
+    	}
+    	Vector3 offset = new Vector3(
+				(float) (Math.abs(Math.cos(theta)) * Math.sin(phi)), 
+				(float) Math.sin(theta), 
+				(float) (Math.abs(Math.cos(theta)) * Math.cos(phi))
+				);
+		pos.add(offset);
+		System.out.println(pos);
+		/*.out.println("%%%%%");
+		System.out.println(index);
+		System.out.println(theta);
+		System.out.println(phi);
+		System.out.println(pos);*/
+    	return pos;
+    }
     
     public void drawParticle(GameTime gameTime) {
     	for (int i = 0; i < mUsingParticleSys.size(); i++) {
