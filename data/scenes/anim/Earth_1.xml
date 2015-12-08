@@ -69,7 +69,7 @@
 			<zPlanes>0.02 1000.0</zPlanes>
 			<perspective>0.01 0.01</perspective>
 			
-			<translation>0 0 100</translation>
+			<translation>0 0 10</translation>
 		</data>
 	</object>
 
