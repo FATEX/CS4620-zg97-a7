@@ -63,10 +63,10 @@ public class Cubemap {
 		double z = d.z;
 		double coordinatex = 1.5 * this.blockSz;
 		double coordinatey = 0.5 * this.blockSz;
-		double R = 3 * (coordinatex + this.width * coordinatey);
-		double G = 3 * (coordinatex + this.width * coordinatey) + 1;
-		double B = 3 * (coordinatex + this.width * coordinatey) + 2;
-		outRadiance.set(R, G, B);
+		int R = (int)(3 * (coordinatex + this.width * coordinatey));
+		int G = (int)(3 * (coordinatex + this.width * coordinatey) + 1);
+		int B = (int)(3 * (coordinatex + this.width * coordinatey) + 2);
+		outRadiance.set(imageData[R], imageData[G], imageData[B]);
 		outRadiance.mul(this.scaleFactor);
 		
 		

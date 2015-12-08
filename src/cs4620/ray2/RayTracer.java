@@ -31,7 +31,7 @@ public class RayTracer {
 	/**
 	 * The maximum number of recursive tracing calls allowed
 	 */
-	public static final int MAX_DEPTH = 12;
+	public static final int MAX_DEPTH = 2;//12
 
 	//Size of image sub-blocks
 	protected static int SUB_WIDTH = 32;

@@ -112,7 +112,7 @@ public class Glass extends Shader {
 				outIntensity.add(outIntensityF.clone().mul(F));
 				outIntensity.add(outIntensity1F.clone().mul(1-F));
 			}
-			if(fromOut && !internal) {
+			if(fromOut && internal) {
 				Ray reflectRay = new Ray();
 				reflectRay.set(record.location, reflect);
 				reflectRay.start = 0;                
