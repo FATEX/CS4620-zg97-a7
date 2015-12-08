@@ -199,7 +199,6 @@ public class TestScreen extends GameScreen {
 		cameraIndex = 0;
 		
 		if (app.scene.objects.get("FireSphere")  != null) {
-			//System.out.println(fireObj.transformation);
 			fireObj = app.scene.objects.get("FireSphere");
 		}
 		rController = new RenderController(app.scene, new Vector2(app.getWidth(), app.getHeight()));
@@ -293,7 +292,7 @@ public class TestScreen extends GameScreen {
 			updateAnimation = false;
 		}
 		
-		updateParticle(gameTime);
+		if (fireObj != null) updateParticle(gameTime);
         
 	}
 	
@@ -343,7 +342,7 @@ public class TestScreen extends GameScreen {
 		
         GLError.get("draw");
         
-        drawParticle(gameTime);
+        if (fireObj != null) drawParticle(gameTime);
 	}
 	
 	
@@ -406,7 +405,7 @@ public class TestScreen extends GameScreen {
         app = (SceneApp)game;
 		
 		renderer = new Renderer();
-    	for (int i = 0; i < 1; i++) this.mUnusedParticleSys.add(new ParticleSystem(MAX_PARTICLES));
+    	for (int i = 0; i < 2; i++) this.mUnusedParticleSys.add(new ParticleSystem(MAX_PARTICLES));
         // First create the programs: one for the particles, one for the wireframes.
         program = new GLProgram(false);
         program.quickCreateResource("particles", "cs4621/Particles/shaders/particles.vert", "cs4621/Particles/shaders/particles.frag", null);
@@ -496,15 +495,23 @@ public class TestScreen extends GameScreen {
     
     public void updateParticle(GameTime gameTime) {
         if(mParticleSystem.mPaused) return;
-        if (fireObj != null) {
-    		//System.out.println(fireObj.transformation);
-        	}
+        
         if (this.mUnusedParticleSys.size() > 0 && Math.random() > 0.99) {
         	//System.out.println(this.mUnusedParticleSys.size());
         	ParticleSystem sys = this.mUnusedParticleSys.poll();
         	if (fireObj != null) {
-        		System.out.println(fireObj.transformation);
-        		sys.setPosition(new Vector3(fireObj.transformation.getTrans().x + 1, fireObj.transformation.getTrans().y, fireObj.transformation.getTrans().z));
+        		//System.out.println(fireObj.transformation);
+        		double theta = Math.random() * Math.PI / 2;
+        		double phi = Math.random() * Math.PI / 2;
+        		Vector3 pos = new Vector3(); 
+        		pos.set(fireObj.transformation.getTrans());
+        		Vector3 offset = new Vector3(
+        				(float) (Math.cos(theta) * Math.cos(phi)), 
+        				(float) Math.sin(theta), 
+        				(float) (Math.cos(theta) * Math.sin(phi))
+        				);
+        		pos.add(offset);
+        		sys.setPosition(pos);
         		Vector3 velocity = new Vector3();
         		sys.setInitDirection(new Vector3(fireObj.transformation.getTrans().x + 1, fireObj.transformation.getTrans().y, fireObj.transformation.getTrans().z));
         	} else {
