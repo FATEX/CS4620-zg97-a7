@@ -55,6 +55,8 @@ public class ParticleSystem {
      * billboard() method. An identity matrix means the camera is at the position (0, 0, z). */
     private Matrix4 billboardTransform = new Matrix4();
     
+    private Vector3 mRefPos = new Vector3();
+    
     /**
      * Creates a particle system with a certain maximum number of particles.
      * @param maxParticles The maximum number of particles which can exist at a single time. 
@@ -130,7 +132,7 @@ public class ParticleSystem {
     	this.mTimeSinceLastSpawn += dt;
     	this.totalTime += dt;
     	boolean transparent = false;
-    	if(this.mTimeSinceLastSpawn >= time && this.mUnspawnedParticles.size() > 0 && currentSpawn <= totalNumParticles) {
+    	if(this.mTimeSinceLastSpawn >= time && this.mUnspawnedParticles.size() > 0 && (currentSpawn <= totalNumParticles || isM)) {
     		this.mTimeSinceLastSpawn = 0;
     		this.currentSpawn++;
     		Particle particle = this.mUnspawnedParticles.poll();
@@ -169,7 +171,8 @@ public class ParticleSystem {
     		//Vector3 velocity = new Vector3((float)Math.random()*2 + 2 + mDirection.x, (float)Math.random()*2 + 2 + mDirection.y, (float)Math.random()*2 + 2 + mDirection.z);
     		
     		velocity.add(ver);
-    		particle.spawn(mass, mPosition, velocity);
+    		if (!isM) particle.spawn(mass, mPosition, velocity);
+    		else particle.spawn(mass, mRefPos, velocity);
     		//System.out.println("dir" + mPosition);
     		this.mSpawnedParticles.add(particle);
     	}
@@ -192,15 +195,21 @@ public class ParticleSystem {
         	//Vector3 force = new Vector3(this.wind, -this.gravity*mass, 0);	
         	//p.accumForce(force);
         	Vector3 force = new Vector3(this.mDirection.clone().negate().mul(this.gravity*mass));
+        	if (isM) force.set(0);
         	Vector3 dragForce = p.getVelocity().clone().mul(-this.drag);
         	force.add(dragForce);
         	p.accumForce(force);
         	p.animate(dt);
         	
-        	double r2 = p.getParticlePosition().clone().distSq(new Vector3(0, 0, 0));  
+        	double r2 = p.getParticlePosition().clone().distSq(mRefPos);  
         			//p.getParticlePosition().x * p.getParticlePosition().x + p.getParticlePosition().y * p.getParticlePosition().y + p.getParticlePosition().z * p.getParticlePosition().z;
         	//System.out.println(r2);
         	if((r2 <= 1 || r2 > 10 || transparent) && !isM){
+        		this.mUnspawnedParticles.add(p);
+        		it.remove();
+        	}
+        	
+        	if (isM && r2 > 2) {
         		this.mUnspawnedParticles.add(p);
         		it.remove();
         	}
@@ -256,5 +265,9 @@ public class ParticleSystem {
     
     public Matrix4 getBillboardTransform() {
         return billboardTransform;
+    }
+    
+    public void setRefPos(Vector3 pos) {
+    	mRefPos = pos;
     }
 }
