@@ -90,7 +90,7 @@ public class ParticleSystem {
         
         IntBuffer quads = NativeMem.createIntBuffer(6);
         quads.put(new int[]{0, 1, 2, 0, 2, 3});
-        //System.out.println("num : " + maxParticles);
+        System.out.println("num : " + maxParticles);
         // Create a random cloud of particles.
         for (int i = 0; i < maxParticles; ++i) {
         	
@@ -136,12 +136,13 @@ public class ParticleSystem {
     		this.mTimeSinceLastSpawn = 0;
     		this.currentSpawn++;
     		Particle particle = this.mUnspawnedParticles.poll();
-    		mDirection.set(1, 1, -1);
+    		//(float)Math.random()*4 -2, (float)Math.random()*2 + 3, (float)Math.random()*4 - 2)
     		mDirection.normalize();
     		
     		Vector3 u = new Vector3();
     		u.set(mDirection.y + mDirection.z + 0, -mDirection.x + 0 -mDirection.z , 0-mDirection.x +mDirection.y);    		
     		u.normalize();
+    		
     		Vector3 w = new Vector3();
     		w.set(u.clone().cross(mDirection));
     		w.normalize();
@@ -150,7 +151,8 @@ public class ParticleSystem {
     		float alpha = (float) Math.random();
     		float bata  = 1 - alpha;
     		ver.set(u.clone().mul(alpha).add(w.clone().mul(bata)));
-    		ver.normalize();	
+    		ver.normalize();
+    				
     		Vector3 velocity = new Vector3();
     		
     		double canVsparticle = mDirection.clone().dot(camT);

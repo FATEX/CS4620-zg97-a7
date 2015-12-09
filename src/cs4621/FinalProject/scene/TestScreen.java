@@ -213,11 +213,9 @@ public class TestScreen extends GameScreen {
 		}
 		
 		try {
-
 			for (int i = 0; i < MeteorL.length; i++) {
 				app.scene.objects.get(MeteorL[i]).transformation.set(Matrix4.createTranslation(0, 0, 10));
 			}
-
 		} catch (Exception e){
 			
 		}
@@ -274,17 +272,28 @@ public class TestScreen extends GameScreen {
 		try {
 			//System.out.println(app.scene.objects.get("Meteor").transformation.getTrans());
 			for (int i = 0; i < MeteorL.length; i++) {
-				if (app.scene.objects.get(MeteorL[i]).transformation.getTrans().equals(new Vector3( 0, 0, 10)) ) {		
+				if (app.scene.objects.get(MeteorL[i]).transformation.getTrans().equals(new Vector3( 0, 0, 10)) ) {	
+					//add rotation
 					app.scene.objects.get(MeteorL[i]).transformation.set(Matrix4.createTranslation(10, 10, 10));
 					app.scene.objects.get(MeteorL[i]).addScale(new Vector3(0.002f));
 					app.scene.objects.get(MeteorL[i]).addTranslation(
 							new Vector3(5 + (float)Math.random(), 5 + (float) Math.random(), 5 + (float)Math.random()));
 					System.out.println("change" + app.scene.objects.get(MeteorL[i]).transformation);
 				}
-				
 				v1 = new Vector3(-0.005f, -0.005f, 0.006f);
 				app.scene.objects.get(MeteorL[i]).addTranslation(v1.clone());
-
+				Matrix4 trans = new Matrix4();
+				trans.set(app.scene.objects.get(MeteorL[i]).transformation.clone());
+				Matrix4 transInverse = trans.clone().invert();
+				
+				Matrix4 rotation = Matrix4.createRotationY(0.01f);
+				Matrix4 rotation2 = Matrix4.createRotationX(0.01f);
+				rotation.mulBefore(rotation2);
+				Matrix4 transform = new Matrix4();
+				transform.set(transInverse);
+				transform.mulAfter(rotation).mulAfter(trans);
+				app.scene.objects.get(MeteorL[i]).transformation.mulAfter(transform);
+				
 			}
 		} catch (Exception e){
 			
@@ -671,7 +680,8 @@ public class TestScreen extends GameScreen {
 				(float) Math.sin(theta) * RADIUS, 
 				(float) (RADIUS * Math.abs(Math.cos(theta)) * Math.cos(phi))
 				);
-    	pos.add(offset);
+		pos.add(offset);
+		//System.out.println("pos" + pos);
 		/*.out.println("%%%%%");
 		System.out.println(index);
 		System.out.println(theta);
@@ -812,4 +822,3 @@ public class TestScreen extends GameScreen {
 	
 	
 	
-
