@@ -124,7 +124,6 @@ public class ParticleSystem {
         //     elapsed since the last particle has spawned, spawn another if you can.
         //     This spawned particle should have some random initial velocity upward in the +y 
         //     direction and its position should be -0.
-    	System.out.println("###camT###" + camT);
     	float time = (float)0.00005;
     	float mass = (float) 1;
     	this.mTimeSinceLastSpawn += dt;

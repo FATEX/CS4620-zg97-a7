@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <scene>
-	<mesh>
+	<!-- <mesh>
 	    <name>Teapot</name>
 	    <data>
 	      <file>data/meshes/rtm_rock_space.obj</file>
 	    </data>
-  	</mesh>
+  	</mesh> -->
 
 	<texture>
 		<name>Earth1</name>
@@ -14,12 +14,12 @@
 		</data>
 	</texture>
 
-	<texture>
+	<!-- <texture>
 		<name>Rock</name>
 		<data>
 			<file>data/scenes/Space Rock/rock_front_col.png</file>
 		</data>
-	</texture>
+	</texture> -->
 
 	<material>
 		<name>Rock</name>
