@@ -17,7 +17,7 @@
 	<texture>
 		<name>Rock</name>
 		<data>
-			<file>data/scenes/Space Rock/rock_front_col.png</file>
+			<file>data/textures/rock_front_col.png</file>
 		</data>
 	</texture>
 
@@ -78,10 +78,31 @@
 		</data>
 	</material>
 	
-	<object>
-		<name>SpaceRock</name>
+	
+
+	
+
+	<texture>
+		<name>Earth</name>
 		<data>
-			
+			<file>data/textures/Earth.png</file>
+		</data>
+	</texture>
+	
+	<material>
+		<name>Earth</name>
+		<data>
+			<type>Ambient</type>
+			<diffuse>
+				<texture>Earth</texture>
+			</diffuse>
+		</data>
+	</material>
+	
+	<object>
+		<name>Meteor</name>
+		<data>
+			<mesh>Teapot</mesh>
 			<material>Rock</material>
 		</data>
 	</object>

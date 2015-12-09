@@ -119,6 +119,7 @@ public class ParticleSystem {
         // TODO#PPA3 SOLUTION START
         // Animate the particle system:
         // 1.) If the particle system is paused, return immediately.
+    	//System.out.println("par pos : " + this.mPosition);
     	if (this.mPaused) return;
         // 2.) Update the time since last spawn, and if a sufficient amount of time has
         //     elapsed since the last particle has spawned, spawn another if you can.
@@ -152,6 +153,7 @@ public class ParticleSystem {
     		
     		velocity.add(ver);
     		particle.spawn(mass, mPosition, velocity);
+    		
     		this.mSpawnedParticles.add(particle);
     	}
     	
@@ -208,7 +210,7 @@ public class ParticleSystem {
     	rotation.set(0, 3, rotation.get(0, 3)-trans.x);
     	rotation.set(1, 3, rotation.get(1, 3)-trans.y);
     	rotation.set(2, 3, rotation.get(2, 3)-trans.z);
-    	this.billboardTransform.set(rotation);
+    	//this.billboardTransform.set(rotation);
     	
         // SOLUTION END
     }

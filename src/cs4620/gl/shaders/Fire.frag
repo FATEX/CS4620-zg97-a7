@@ -7,7 +7,7 @@
 uniform float time;
 
 const vec3 texture_scales = vec3(1.0, 2.0, 3.0);
-const vec3 scroll_speeds = vec3(1.0, 1.0, 1.0);
+const vec3 scroll_speeds = vec3(0.1, 0.1, 0.1);
 
 varying vec2 fUV;
 varying vec3 fPos;

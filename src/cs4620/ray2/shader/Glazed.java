@@ -58,6 +58,7 @@ public class Glazed extends Shader {
         //  1) Compute the Fresnel term R
         //  2) Shade the substrate and multiply the result color by 1 - R
         //  3) Compute the reflected ray and call RayTracer.shadeRay on it, multiply result color by R
+		if (depth > 2) return;
 		Vector3d loc = new Vector3d();
 		loc.set(record.location);
 					
@@ -85,7 +86,7 @@ public class Glazed extends Shader {
 		
 		substrate.shade(outIntensitysubstrate, scene, ray, record, depth + 1);
 		RayTracer.shadeRay(outIntensityreflect, scene, reflectRay, depth + 1);	
-		outIntensity.add(outIntensitysubstrate.clone());
+		outIntensity.add(outIntensitysubstrate.clone().mul(1-F));
 		outIntensity.add(outIntensityreflect.clone().mul(F));
 	}
 }
