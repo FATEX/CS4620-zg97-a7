@@ -17,6 +17,8 @@ import blister.input.MouseButtonEventArgs;
 import blister.input.MouseEventDispatcher;
 import blister.input.MouseWheelEventArgs;
 import blister.input.MouseMoveEventArgs;
+import cs4620.gl.RenderCamera;
+import cs4620.gl.RenderController;
 import cs4620.mesh.MeshData;
 import egl.GL.BufferTarget;
 import egl.GL.BufferUsageHint;
@@ -52,6 +54,9 @@ public final class ParticleScreen extends GameScreen{
     /* For calculating FPS */
     private final float FPS_ALPHA = 0.5f;
     private float mFps = 0;
+    
+    RenderController rController;
+    int cameraIndex = 0;
     
     /* Vertex shader inputs */
     private GLBuffer rasterVerts;
@@ -382,7 +387,10 @@ public final class ParticleScreen extends GameScreen{
         
         
         for (int i = 0; i < mUsingParticleSys.size(); i++) {
-        	mUsingParticleSys.get(i).animate((float) gameTime.elapsed);
+        	if(rController.env.cameras.size() > 0) {
+                RenderCamera cam = rController.env.cameras.get(cameraIndex);
+                mUsingParticleSys.get(i).animate((float) gameTime.elapsed, cam.mWorldTransform.getTrans());
+        	}
         }
         
         Iterator<ParticleSystem> it = this.mUsingParticleSys.iterator();

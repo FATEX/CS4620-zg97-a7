@@ -115,7 +115,7 @@ public class ParticleSystem {
     /**
      * Create, destroy, and move particles.
      */
-    public void animate(float dt) {
+    public void animate(float dt, Vector3 camT) {
         // TODO#PPA3 SOLUTION START
         // Animate the particle system:
         // 1.) If the particle system is paused, return immediately.
@@ -124,20 +124,37 @@ public class ParticleSystem {
         //     elapsed since the last particle has spawned, spawn another if you can.
         //     This spawned particle should have some random initial velocity upward in the +y 
         //     direction and its position should be -0.
+    	System.out.println("###camT###" + camT);
     	float time = (float)0.00005;
     	float mass = (float) 1;
     	this.mTimeSinceLastSpawn += dt;
     	this.totalTime += dt;
+    	boolean transparent = false;
     	if(this.mTimeSinceLastSpawn >= time && this.mUnspawnedParticles.size() > 0 && currentSpawn <= totalNumParticles) {
     		this.mTimeSinceLastSpawn = 0;
     		this.currentSpawn++;
     		Particle particle = this.mUnspawnedParticles.poll();
     		//(float)Math.random()*4 -2, (float)Math.random()*2 + 3, (float)Math.random()*4 - 2)
     		mDirection.normalize();
+    		Vector3 u = new Vector3();
+    		u.set(mDirection.y + mDirection.z + 0, -mDirection.x + 0 -mDirection.z , 0-mDirection.x +mDirection.y);    		
+    		u.normalize();
+    		
+    		Vector3 w = new Vector3();
+    		w.set(u.clone().cross(mDirection));
+    		w.normalize();
+    		
     		Vector3 ver = new Vector3();
-    		ver.set(mDirection.y + mDirection.z + 0, -mDirection.x + 0 -mDirection.z , 0-mDirection.x +mDirection.y);
+    		float alpha = (float) Math.random();
+    		float bata  = 1 - alpha;
+    		ver.set(u.clone().mul(alpha).add(w.clone().mul(bata)));
     		ver.normalize();
+    				
     		Vector3 velocity = new Vector3();
+    		
+    		double canVsparticle = mDirection.clone().dot(camT);
+    		if(canVsparticle < 0) transparent = true;
+    		   		
     		if (totalTime < 5) {
     			ver.mul((float)Math.random()* 0.5f - 0.25f);
     			velocity.set((mDirection.clone().mul((float)Math.random()*0.5f + 1)));
@@ -179,7 +196,7 @@ public class ParticleSystem {
         	p.animate(dt);
         	double r2 = p.getParticlePosition().x * p.getParticlePosition().x + p.getParticlePosition().y * p.getParticlePosition().y + p.getParticlePosition().z * p.getParticlePosition().z;
         	//System.out.println(r2);
-        	if(r2 <= 1 || r2 > 10){
+        	if(r2 <= 1 || r2 > 10 || transparent){
         		this.mUnspawnedParticles.add(p);
         		it.remove();
         	}

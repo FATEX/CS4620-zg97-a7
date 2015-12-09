@@ -58,6 +58,7 @@ public class Glazed extends Shader {
         //  1) Compute the Fresnel term R
         //  2) Shade the substrate and multiply the result color by 1 - R
         //  3) Compute the reflected ray and call RayTracer.shadeRay on it, multiply result color by R
+		if(depth > 2) return;
 		Vector3d loc = new Vector3d();
 		loc.set(record.location);
 					
@@ -68,7 +69,7 @@ public class Glazed extends Shader {
 		Vector3d normal = new Vector3d();
 		normal.set(record.normal);
 		normal.normalize();
-		if(normal.clone().dot(inDir) < 0) normal.negate();
+		//if(normal.clone().dot(inDir) < 0) normal.negate();
 		double F = record.surface.getShader().fresnel(normal, inDir, refractiveIndex);
 		
 		Colord outIntensitysubstrate = new Colord();
@@ -85,7 +86,7 @@ public class Glazed extends Shader {
 		
 		substrate.shade(outIntensitysubstrate, scene, ray, record, depth + 1);
 		RayTracer.shadeRay(outIntensityreflect, scene, reflectRay, depth + 1);	
-		outIntensity.add(outIntensitysubstrate.clone());
+		outIntensity.add(outIntensitysubstrate.clone().mul(1-F));
 		outIntensity.add(outIntensityreflect.clone().mul(F));
 	}
 }

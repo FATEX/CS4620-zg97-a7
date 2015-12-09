@@ -53,7 +53,6 @@ public class Particle extends Mesh {
         mVelocity.set(initialVelocity);
         //System.out.println("### spawn velovity" + this.mVelocity);
         mAge = 0.0f;
-        
         return this;
     }
     

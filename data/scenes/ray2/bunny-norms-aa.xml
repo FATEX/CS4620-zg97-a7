@@ -3,6 +3,11 @@
  -->
 <scene>
   <samples>16</samples>
+  <accelStruct type="Bvh" />
+  <cubemap>
+  <filename>data/textures/cubemaps/kitchen_cross.pfm</filename>
+  <scaleFactor>0.1</scaleFactor> 
+  </cubemap>
   <exposure>6.54321</exposure>
   <camera type="PerspectiveCamera">
     <viewPoint>4 6 8</viewPoint>
@@ -27,11 +32,7 @@
     <shader ref="bunny" />
     <data>../../meshes/bunnyNV.obj</data>
   </surface>
-  <surface type="Box">
-  	<minpt>-3 -2 -3</minpt>
-  	<maxpt>3 -0.9 3</maxpt>
-  	<shader ref="ground" />
-  </surface>
+  
   
   <light type="PointLight">
   	<position>3 10 5</position>

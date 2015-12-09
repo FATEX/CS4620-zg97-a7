@@ -517,7 +517,11 @@ public class TestScreen extends GameScreen {
     	index++;
     	
         for (int i = 0; i < mUsingParticleSys.size(); i++) {
-        	mUsingParticleSys.get(i).animate((float) gameTime.elapsed);
+        	if(rController.env.cameras.size() > 0) {
+                RenderCamera cam = rController.env.cameras.get(cameraIndex);
+                mUsingParticleSys.get(i).animate((float) gameTime.elapsed, cam.mWorldTransform.getTrans());
+        	}
+        	
         }
         
         Iterator<ParticleSystem> it = this.mUsingParticleSys.iterator();

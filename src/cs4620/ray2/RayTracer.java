@@ -26,7 +26,7 @@ public class RayTracer {
 	/**
 	 * Output HDR image (using openEXR)
 	 */
-	public static final boolean writeHDR = false;
+	public static final boolean writeHDR = true;
 
 	/**
 	 * The maximum number of recursive tracing calls allowed
