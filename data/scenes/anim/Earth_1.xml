@@ -171,4 +171,40 @@
 		</data>
 	</object>
 
+    <cubemap>
+        <name>EnvMap</name>
+        <data>
+            <file>data/textures/Envir/LancellottiChapel/</file>
+        </data>
+    </cubemap>
+    
+	<material>
+		<name>Mirror</name>
+		<data>
+			<type>ReflectionMap</type>
+		</data>
+	</material>
+    
+    <mesh>
+        <name>SkyBox.obj</name>
+        <data>
+            <file>data/meshes/skybox.obj</file>
+        </data>
+    </mesh>
+    
+    <material>
+        <name>EnvironmentLight</name>
+        <data>
+            <type>Environment</type>
+        </data>
+    </material>
+    
+    <object>
+        <name>SkyBox</name>
+        <data>
+            <mesh>SkyBox.obj</mesh>
+            <material>EnvironmentLight</material>
+        </data>
+    </object>
+
 </scene>
