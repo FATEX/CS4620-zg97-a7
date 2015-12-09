@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--  Stanford Bunny mesh (500 triangles, with normals)
  -->
+
+ 
 <scene>
+  <cubemap>
+    <filename>data/textures/cubemaps/kitchen_cross.pfm</filename>
+    <scaleFactor>0.1</scaleFactor> 
+  </cubemap>
   <samples>16</samples>
   <exposure>6.54321</exposure>
   <camera type="PerspectiveCamera">
@@ -27,11 +33,7 @@
     <shader ref="bunny" />
     <data>../../meshes/bunnyNV.obj</data>
   </surface>
-  <surface type="Box">
-  	<minpt>-3 -2 -3</minpt>
-  	<maxpt>3 -0.9 3</maxpt>
-  	<shader ref="ground" />
-  </surface>
+  
   
   <light type="PointLight">
   	<position>3 10 5</position>
