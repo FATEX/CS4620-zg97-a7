@@ -56,6 +56,7 @@ public class ParticleSystem {
     private Matrix4 billboardTransform = new Matrix4();
     
     private Vector3 mRefPos = new Vector3();
+    public boolean inited = false;
     
     /**
      * Creates a particle system with a certain maximum number of particles.
@@ -261,6 +262,7 @@ public class ParticleSystem {
     
     public void setInitDirection(Vector3 direction) {
     	this.mDirection = direction;
+    	this.inited = true;
     }
     
     public Matrix4 getBillboardTransform() {
