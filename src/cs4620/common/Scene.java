@@ -108,6 +108,10 @@ public class Scene {
 		m = new Mesh();
 		m.setGenerator(new MeshGenPlane());
 		addMesh(new NameBindMesh("Plane", m));
+		//add rock mesh
+		m = new Mesh();
+		m.setGenerator(new MeshGenPlane());
+		addMesh(new NameBindMesh("Rock1", m));
 
 		// Add Simple Generated Textures
 		Texture t = new Texture();

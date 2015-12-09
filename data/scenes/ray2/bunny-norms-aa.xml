@@ -9,6 +9,11 @@
     <scaleFactor>0.1</scaleFactor> 
   </cubemap>
   <samples>16</samples>
+  <accelStruct type="Bvh" />
+  <cubemap>
+  <filename>data/textures/cubemaps/kitchen_cross.pfm</filename>
+  <scaleFactor>0.1</scaleFactor> 
+  </cubemap>
   <exposure>6.54321</exposure>
   <camera type="PerspectiveCamera">
     <viewPoint>4 6 8</viewPoint>

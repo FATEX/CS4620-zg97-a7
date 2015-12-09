@@ -2,6 +2,11 @@
 <!--  A blue box sitting on a floor.
  -->
 <scene>
+  <accelStruct type="Bvh" />
+  <cubemap>
+  <filename>data/textures/cubemaps/kitchen_cross.pfm</filename>
+  </cubemap>
+  <!-- ... -->
   <samples>16</samples>
   <camera type="PerspectiveCamera">
     <viewPoint>0 25 0</viewPoint>
