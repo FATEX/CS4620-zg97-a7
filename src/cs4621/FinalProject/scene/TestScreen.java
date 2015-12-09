@@ -102,6 +102,8 @@ public class TestScreen extends GameScreen {
 	
 	SceneObject fireObj = new SceneObject();
 	
+	private String[] MeteorL = {"Meteor1", "Meteor2", "Meteor3", "Meteor4", "Meteor5"};
+	
     @Override
     public int getNext() {
 	        // Don't modify this method
@@ -211,8 +213,11 @@ public class TestScreen extends GameScreen {
 		}
 		
 		try {
-			app.scene.objects.get("Meteor").transformation.set(Matrix4.createTranslation(0, 0, 10));
-			//app.scene.objects.get("SpaceRock").transformation.set(Matrix4.createTranslation(0, 0, 0));		
+
+			for (int i = 0; i < MeteorL.length; i++) {
+				app.scene.objects.get(MeteorL[i]).transformation.set(Matrix4.createTranslation(0, 0, 10));
+			}
+
 		} catch (Exception e){
 			
 		}
@@ -268,22 +273,19 @@ public class TestScreen extends GameScreen {
 		int curCamScroll = 0;
 		try {
 			//System.out.println(app.scene.objects.get("Meteor").transformation.getTrans());
-			if (app.scene.objects.get("Meteor").transformation.getTrans().equals(new Vector3( 0, 0, 10)) ) {		
-				app.scene.objects.get("Meteor").transformation.set(Matrix4.createTranslation(10, 10, 10));
-				Matrix4 trans = app.scene.objects.get("Meteor").transformation;
-				Matrix4 worldtoObject = new Matrix4(trans.invert());
-				Matrix4 rotation = new Matrix4();				
-				rotation.createRotationX(0.1f);
-				Matrix4 objecttoWorld = new Matrix4(trans.clone().mulBefore(rotation).mulBefore(worldtoObject));
+			for (int i = 0; i < MeteorL.length; i++) {
+				if (app.scene.objects.get(MeteorL[i]).transformation.getTrans().equals(new Vector3( 0, 0, 10)) ) {		
+					app.scene.objects.get(MeteorL[i]).transformation.set(Matrix4.createTranslation(10, 10, 10));
+					app.scene.objects.get(MeteorL[i]).addScale(new Vector3(0.002f));
+					app.scene.objects.get(MeteorL[i]).addTranslation(
+							new Vector3(5 + (float)Math.random(), 5 + (float) Math.random(), 5 + (float)Math.random()));
+					System.out.println("change" + app.scene.objects.get(MeteorL[i]).transformation);
+				}
 				
-				app.scene.objects.get("Meteor").transformation.set(trans.clone().mulAfter(objecttoWorld));
-				
-				app.scene.objects.get("Meteor").addScale(new Vector3(0.002f));
-				//app.scene.objects.get("Meteor").addTranslation(new Vector3(5, 5, 5));
-				System.out.println("change" + app.scene.objects.get("Meteor").transformation);
+				v1 = new Vector3(-0.005f, -0.005f, 0.006f);
+				app.scene.objects.get(MeteorL[i]).addTranslation(v1.clone());
+
 			}
-			v1 = new Vector3(-0.005f, -0.005f, 0.006f);
-			app.scene.objects.get("Meteor").addTranslation(v1.clone());
 		} catch (Exception e){
 			
 		}
@@ -304,6 +306,7 @@ public class TestScreen extends GameScreen {
 		s.setMaterial("Generic");
 		s.transformation.set(Matrix4.createTranslation(0, 0, 0));
 		app.scene.objects.add(s);
+		
 		app.scene.sendEvent(new SceneObjectResourceEvent(s, SceneObjectResourceEvent.Type.Material));*/
 			
 		if(Keyboard.isKeyDown(Keyboard.KEY_EQUALS)) curCamScroll++;
@@ -454,6 +457,7 @@ public class TestScreen extends GameScreen {
     /* Mouse information */
     private boolean mousePressed = false;
 
+    private final int RADIUS = 1;
     
     
     ParticleSystem ms1;
@@ -580,6 +584,7 @@ public class TestScreen extends GameScreen {
         		Vector3 pos = createParticlePos(index);
         		sys.setPosition(pos.clone());
         		sys.setInitDirection(pos.clone());
+        		sys.setRefPos(new Vector3(0));
         	} else {
         		sys.setPosition(new Vector3((float) (-1), (float) -0.5, 0));
         		sys.setInitDirection(new Vector3(0f, 1f, 0f));
@@ -589,12 +594,13 @@ public class TestScreen extends GameScreen {
     	
     	try{
     		
-        	ms1.setPosition(app.scene.objects.get("Meteor").transformation.getTrans().clone());
+        	ms1.setPosition(app.scene.objects.get("Meteor1").transformation.getTrans().clone());
         	ms1.setInitDirection(v1.clone().normalize().negate());
         	
         	if(rController.env.cameras.size() > 0) {
                 RenderCamera cam = rController.env.cameras.get(cameraIndex);
                 ms1.animate((float) gameTime.elapsed, cam.mWorldTransform.getTrans(), true);
+                ms1.setRefPos(app.scene.objects.get("Meteor1").transformation.getTrans().clone());
         	}
     	} catch (Exception e) {
     		
@@ -661,9 +667,9 @@ public class TestScreen extends GameScreen {
     		phi = Math.random() * Math.PI / 2 + Math.PI / 2;
     	}
     	Vector3 offset = new Vector3(
-				(float) (1 * Math.abs(Math.cos(theta)) * Math.sin(phi)), 
-				(float) Math.sin(theta) * 1f, 
-				(float) (1 * Math.abs(Math.cos(theta)) * Math.cos(phi))
+				(float) (RADIUS * Math.abs(Math.cos(theta)) * Math.sin(phi)), 
+				(float) Math.sin(theta) * RADIUS, 
+				(float) (RADIUS * Math.abs(Math.cos(theta)) * Math.cos(phi))
 				);
     	pos.add(offset);
 		/*.out.println("%%%%%");

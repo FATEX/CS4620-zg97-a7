@@ -18,6 +18,7 @@
 		<name>Rock</name>
 		<data>
 			<file>data/textures/rock_front_col.png</file>
+			<file>data/textures/rock_shadow_new.png</file>
 		</data>
 	</texture>
 
@@ -100,7 +101,39 @@
 	</material>
 	
 	<object>
-		<name>Meteor</name>
+		<name>Meteor1</name>
+		<data>
+			<mesh>Teapot</mesh>
+			<material>Rock</material>
+		</data>
+	</object>
+
+	<object>
+		<name>Meteor2</name>
+		<data>
+			<mesh>Teapot</mesh>
+			<material>Rock</material>
+		</data>
+	</object>
+
+	<object>
+		<name>Meteor3</name>
+		<data>
+			<mesh>Teapot</mesh>
+			<material>Rock</material>
+		</data>
+	</object>
+
+	<object>
+		<name>Meteor4</name>
+		<data>
+			<mesh>Teapot</mesh>
+			<material>Rock</material>
+		</data>
+	</object>
+
+	<object>
+		<name>Meteor5</name>
 		<data>
 			<mesh>Teapot</mesh>
 			<material>Rock</material>
@@ -137,4 +170,5 @@
 			<material>Earth1</material>
 		</data>
 	</object>
+
 </scene>
