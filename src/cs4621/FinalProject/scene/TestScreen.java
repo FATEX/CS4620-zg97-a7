@@ -577,7 +577,7 @@ public class TestScreen extends GameScreen {
 				(float) (Math.abs(Math.cos(theta)) * Math.cos(phi))
 				);
 		pos.add(offset);
-		System.out.println(pos);
+		//System.out.println(pos);
 		/*.out.println("%%%%%");
 		System.out.println(index);
 		System.out.println(theta);
