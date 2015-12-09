@@ -389,7 +389,7 @@ public final class ParticleScreen extends GameScreen{
         for (int i = 0; i < mUsingParticleSys.size(); i++) {
         	if(rController.env.cameras.size() > 0) {
                 RenderCamera cam = rController.env.cameras.get(cameraIndex);
-                mUsingParticleSys.get(i).animate((float) gameTime.elapsed, cam.mWorldTransform.getTrans());
+                mUsingParticleSys.get(i).animate((float) gameTime.elapsed, cam.mWorldTransform.getTrans(), false);
         	}
         }
         

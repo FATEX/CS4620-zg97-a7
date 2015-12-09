@@ -115,7 +115,7 @@ public class ParticleSystem {
     /**
      * Create, destroy, and move particles.
      */
-    public void animate(float dt, Vector3 camT) {
+    public void animate(float dt, Vector3 camT, boolean isM) {
         // TODO#PPA3 SOLUTION START
         // Animate the particle system:
         // 1.) If the particle system is paused, return immediately.
@@ -136,6 +136,7 @@ public class ParticleSystem {
     		Particle particle = this.mUnspawnedParticles.poll();
     		//(float)Math.random()*4 -2, (float)Math.random()*2 + 3, (float)Math.random()*4 - 2)
     		mDirection.normalize();
+    		
     		Vector3 u = new Vector3();
     		u.set(mDirection.y + mDirection.z + 0, -mDirection.x + 0 -mDirection.z , 0-mDirection.x +mDirection.y);    		
     		u.normalize();
@@ -169,7 +170,7 @@ public class ParticleSystem {
     		
     		velocity.add(ver);
     		particle.spawn(mass, mPosition, velocity);
-    		
+    		//System.out.println("dir" + mPosition);
     		this.mSpawnedParticles.add(particle);
     	}
     	
@@ -195,9 +196,11 @@ public class ParticleSystem {
         	force.add(dragForce);
         	p.accumForce(force);
         	p.animate(dt);
-        	double r2 = p.getParticlePosition().x * p.getParticlePosition().x + p.getParticlePosition().y * p.getParticlePosition().y + p.getParticlePosition().z * p.getParticlePosition().z;
+        	
+        	double r2 = p.getParticlePosition().clone().distSq(new Vector3(0, 0, 0));  
+        			//p.getParticlePosition().x * p.getParticlePosition().x + p.getParticlePosition().y * p.getParticlePosition().y + p.getParticlePosition().z * p.getParticlePosition().z;
         	//System.out.println(r2);
-        	if(r2 <= 1 || r2 > 10 || transparent){
+        	if((r2 <= 1 || r2 > 10 || transparent) && !isM){
         		this.mUnspawnedParticles.add(p);
         		it.remove();
         	}
