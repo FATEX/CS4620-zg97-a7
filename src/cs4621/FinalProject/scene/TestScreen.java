@@ -103,6 +103,7 @@ public class TestScreen extends GameScreen {
 	SceneObject fireObj = new SceneObject();
 	
 	private String[] MeteorL = {"Meteor1", "Meteor2", "Meteor3", "Meteor4", "Meteor5"};
+	private Vector3[] vL = new Vector3[5]; 
 	
     @Override
     public int getNext() {
@@ -280,8 +281,11 @@ public class TestScreen extends GameScreen {
 							new Vector3(5 + (float)Math.random(), 5 + (float) Math.random(), 5 + (float)Math.random()));
 					System.out.println("change" + app.scene.objects.get(MeteorL[i]).transformation);
 				}
-				v1 = new Vector3(-0.005f, -0.005f, 0.006f);
-				app.scene.objects.get(MeteorL[i]).addTranslation(v1.clone());
+				
+				
+				vL[i] = new Vector3(-0.005f, -0.005f, 0.006f);
+				app.scene.objects.get(MeteorL[i]).addTranslation(vL[i].clone());
+				
 				Matrix4 trans = new Matrix4();
 				trans.set(app.scene.objects.get(MeteorL[i]).transformation.clone());
 				Matrix4 transInverse = trans.clone().invert();
@@ -294,6 +298,7 @@ public class TestScreen extends GameScreen {
 				transform.mulAfter(rotation).mulAfter(trans);
 				app.scene.objects.get(MeteorL[i]).transformation.mulAfter(transform);
 				
+
 			}
 		} catch (Exception e){
 			
@@ -467,6 +472,8 @@ public class TestScreen extends GameScreen {
     private boolean mousePressed = false;
 
     private final int RADIUS = 1;
+    private final int METEOR_PARTICLE_SYS = 5;
+    private final int MAX_METEOR_PARTICLE = 200;
     
     
     ParticleSystem ms1;
@@ -474,22 +481,20 @@ public class TestScreen extends GameScreen {
     ParticleSystem ms3;
     ParticleSystem ms4;
     ParticleSystem ms5;
-    
-    private Vector3 v1 = new Vector3();
  
-    //@Override
+    
     public void buildParticle() {
         app = (SceneApp)game;
 		
 		renderer = new Renderer();
     	for (int i = 0; i < PARTICLE_SYSTEM_NUM; i++) this.mUnusedParticleSys.add(new ParticleSystem(MAX_PARTICLES));
     	
-    	//for (int j = 0; j < 1; j++) this.mMeteorParticleSys.add(new ParticleSystem(MAX_PARTICLES));
-    	ms1 = new ParticleSystem(200);
+    	for (int j = 0; j < METEOR_PARTICLE_SYS; j++) this.mMeteorParticleSys.add(new ParticleSystem(MAX_METEOR_PARTICLE));
+    	/*ms1 = new ParticleSystem(200);
     	ms2 = new ParticleSystem(200);
     	ms3 = new ParticleSystem(200);
     	ms4 = new ParticleSystem(200);
-    	ms5 = new ParticleSystem(200);
+    	ms5 = new ParticleSystem(200);*/
     	// First create the programs: one for the particles, one for the wireframes.
         program = new GLProgram(false);
         program.quickCreateResource("particles", "cs4621/Particles/shaders/particles.vert", "cs4621/Particles/shaders/particles.frag", null);
@@ -602,15 +607,17 @@ public class TestScreen extends GameScreen {
     	}
     	
     	try{
-    		
-        	ms1.setPosition(app.scene.objects.get("Meteor1").transformation.getTrans().clone());
-        	ms1.setInitDirection(v1.clone().normalize().negate());
-        	
-        	if(rController.env.cameras.size() > 0) {
-                RenderCamera cam = rController.env.cameras.get(cameraIndex);
-                ms1.animate((float) gameTime.elapsed, cam.mWorldTransform.getTrans(), true);
-                ms1.setRefPos(app.scene.objects.get("Meteor1").transformation.getTrans().clone());
-        	}
+    		for (int i = 0; i < METEOR_PARTICLE_SYS; i++) {
+    			//if (mMeteorParticleSys.get(i).inited) continue;
+    			mMeteorParticleSys.get(i).setPosition(app.scene.objects.get(MeteorL[i]).transformation.getTrans().clone());
+    			mMeteorParticleSys.get(i).setInitDirection(vL[i].clone().normalize().negate());
+            	
+            	if(rController.env.cameras.size() > 0) {
+                    RenderCamera cam = rController.env.cameras.get(cameraIndex);
+                    mMeteorParticleSys.get(i).animate((float) gameTime.elapsed, cam.mWorldTransform.getTrans(), true);
+                    mMeteorParticleSys.get(i).setRefPos(app.scene.objects.get(MeteorL[i]).transformation.getTrans().clone());
+            	}
+    		}   	
     	} catch (Exception e) {
     		
     	}
@@ -694,9 +701,10 @@ public class TestScreen extends GameScreen {
     	for (int i = 0; i < mUsingParticleSys.size(); i++) {
         	drawPatricleSystem(mUsingParticleSys.get(i));
         }
-    	drawPatricleSystem(ms1);
-        
-        
+    	
+    	for (int i = 0; i < METEOR_PARTICLE_SYS; i++) {
+    		drawPatricleSystem(this.mMeteorParticleSys.get(i));
+    	}   
     }
     
    

@@ -66,7 +66,7 @@ public class Cubemap {
 		Vector2d outFaceUV = new Vector2d();
 		int iFace = dirToFace(dir, outFaceUV);
 		int index = faceToIndex(iFace, outFaceUV);
-		outRadiance.set(imageData[index * 3], imageData[3 * index + 1], imageData[3 * index + 2]);
+		outRadiance.set(imageData[3 * index], imageData[3 * index + 1], imageData[3 * index + 2]);
 		outRadiance.mul(this.scaleFactor);       
 	}
 
