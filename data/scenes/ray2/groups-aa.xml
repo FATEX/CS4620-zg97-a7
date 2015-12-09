@@ -2,6 +2,7 @@
 <!--  A series of transformed cubes.
  -->
 <scene>
+  <accelStruct type="Bvh" />
   <samples>16</samples>
   <exposure>300</exposure>
   <camera type="PerspectiveCamera">

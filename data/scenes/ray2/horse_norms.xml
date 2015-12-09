@@ -2,6 +2,7 @@
 <!--  Horse mesh (~100K polygons, with normals)
  -->
 <scene>
+  <accelStruct type="Bvh" />
   <camera type="PerspectiveCamera">
     <viewPoint>4 6 8</viewPoint>
     <viewDir>-4 -6 -8</viewDir>

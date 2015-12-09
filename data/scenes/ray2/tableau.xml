@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <scene>
+  <accelStruct type="Bvh" />
   <samples>16</samples>
   <camera type="PerspectiveCamera">
 	 	<viewPoint>0 4 12</viewPoint>

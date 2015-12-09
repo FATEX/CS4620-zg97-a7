@@ -26,9 +26,19 @@ import blister.input.MouseMoveEventArgs;
 import blister.input.MouseWheelEventArgs;
 import cs4620.anim.Animator;
 import cs4620.anim.TimelineViewer;
+import cs4620.common.Material;
+import cs4620.common.Mesh;
 import cs4620.common.Scene;
 import cs4620.common.SceneObject;
+import cs4620.common.Texture;
+import cs4620.common.Scene.NameBindMaterial;
+import cs4620.common.Scene.NameBindMesh;
+import cs4620.common.Scene.NameBindTexture;
+import cs4620.common.event.SceneObjectResourceEvent;
 import cs4620.common.event.SceneReloadEvent;
+import cs4620.common.texture.TexGenCheckerBoard;
+import cs4620.common.texture.TexGenSphereNormalMap;
+import cs4620.common.texture.TexGenUVGrid;
 import cs4620.gl.GridRenderer;
 import cs4620.gl.RenderCamera;
 import cs4620.gl.RenderController;
@@ -36,6 +46,7 @@ import cs4620.gl.RenderObject;
 import cs4620.gl.Renderer;
 import cs4620.gl.manip.ManipController;
 import cs4620.mesh.MeshData;
+import cs4620.mesh.gen.MeshGenSphere;
 import cs4620.scene.SceneApp;
 import cs4620.scene.form.RPMaterialData;
 import cs4620.scene.form.RPMeshData;
@@ -196,7 +207,16 @@ public class TestScreen extends GameScreen {
 		
 		if (app.scene.objects.get("FireSphere")  != null) {
 			fireObj = app.scene.objects.get("FireSphere");
+			fireObj.addScale(new Vector3(1f));
 		}
+		
+		try {
+			app.scene.objects.get("Meteor").transformation.set(Matrix4.createTranslation(0, 0, 10));
+			//app.scene.objects.get("SpaceRock").transformation.set(Matrix4.createTranslation(0, 0, 0));		
+		} catch (Exception e){
+			
+		}
+		
 		rController = new RenderController(app.scene, new Vector2(app.getWidth(), app.getHeight()));
 		renderer.buildPasses(rController.env.root);
 		camUpdater = new CameraUpdater(app.scene, rController.env, null);
@@ -246,10 +266,45 @@ public class TestScreen extends GameScreen {
 	public void update(GameTime gameTime) {
 		pick = false;
 		int curCamScroll = 0;
-
-		if (fireObj != null) {
-			//fireObj.addTranslation(new Vector3(0.01f, 0, 0));
+		try {
+			//System.out.println(app.scene.objects.get("Meteor").transformation.getTrans());
+			if (app.scene.objects.get("Meteor").transformation.getTrans().equals(new Vector3( 0, 0, 10)) ) {		
+				app.scene.objects.get("Meteor").transformation.set(Matrix4.createTranslation(10, 10, 10));
+				Matrix4 trans = app.scene.objects.get("Meteor").transformation;
+				Matrix4 worldtoObject = new Matrix4(trans.invert());
+				Matrix4 rotation = new Matrix4();				
+				rotation.createRotationX(0.1f);
+				Matrix4 objecttoWorld = new Matrix4(trans.clone().mulBefore(rotation).mulBefore(worldtoObject));
+				
+				app.scene.objects.get("Meteor").transformation.set(trans.clone().mulAfter(objecttoWorld));
+				
+				app.scene.objects.get("Meteor").addScale(new Vector3(0.002f));
+				//app.scene.objects.get("Meteor").addTranslation(new Vector3(5, 5, 5));
+				System.out.println("change" + app.scene.objects.get("Meteor").transformation);
+			}
+			v1 = new Vector3(-0.005f, -0.005f, 0.006f);
+			app.scene.objects.get("Meteor").addTranslation(v1.clone());
+		} catch (Exception e){
+			
 		}
+		
+		/*Mesh m = new Mesh();
+		m.setGenerator(new MeshGenSphere());
+		app.scene.addMesh(new NameBindMesh("S1", m));
+		
+		Texture t = new Texture();
+		t.setGenerator(new TexGenCheckerBoard());
+		app.scene.addTexture(new NameBindTexture("Checker Board", t));
+		
+		Material mat = new Material();
+		mat.setType(Material.T_AMBIENT);
+		app.scene.addMaterial(new NameBindMaterial("Generic", mat));
+		SceneObject s = new SceneObject();
+		s.setMesh("S1");
+		s.setMaterial("Generic");
+		s.transformation.set(Matrix4.createTranslation(0, 0, 0));
+		app.scene.objects.add(s);
+		app.scene.sendEvent(new SceneObjectResourceEvent(s, SceneObjectResourceEvent.Type.Material));*/
 			
 		if(Keyboard.isKeyDown(Keyboard.KEY_EQUALS)) curCamScroll++;
 		if(Keyboard.isKeyDown(Keyboard.KEY_MINUS)) curCamScroll--;
@@ -345,7 +400,7 @@ public class TestScreen extends GameScreen {
 	
 	
 	private final int MAX_PARTICLES = 1024;
-    private final int PARTICLE_SYSTEM_NUM = 1;
+    private final int PARTICLE_SYSTEM_NUM = 16;
     /* For calculating FPS */
     private final float FPS_ALPHA = 0.5f;
     private float mFps = 0;
@@ -394,16 +449,35 @@ public class TestScreen extends GameScreen {
     private LinkedList<ParticleSystem> mUsingParticleSys = new LinkedList<ParticleSystem>();
     private LinkedList<ParticleSystem> mUnusedParticleSys = new LinkedList<ParticleSystem>();
     
+    private LinkedList<ParticleSystem> mMeteorParticleSys = new LinkedList<ParticleSystem>();
+    
     /* Mouse information */
     private boolean mousePressed = false;
 
+    
+    
+    ParticleSystem ms1;
+    ParticleSystem ms2;
+    ParticleSystem ms3;
+    ParticleSystem ms4;
+    ParticleSystem ms5;
+    
+    private Vector3 v1 = new Vector3();
+ 
     //@Override
     public void buildParticle() {
         app = (SceneApp)game;
 		
 		renderer = new Renderer();
     	for (int i = 0; i < PARTICLE_SYSTEM_NUM; i++) this.mUnusedParticleSys.add(new ParticleSystem(MAX_PARTICLES));
-        // First create the programs: one for the particles, one for the wireframes.
+    	
+    	//for (int j = 0; j < 1; j++) this.mMeteorParticleSys.add(new ParticleSystem(MAX_PARTICLES));
+    	ms1 = new ParticleSystem(200);
+    	ms2 = new ParticleSystem(200);
+    	ms3 = new ParticleSystem(200);
+    	ms4 = new ParticleSystem(200);
+    	ms5 = new ParticleSystem(200);
+    	// First create the programs: one for the particles, one for the wireframes.
         program = new GLProgram(false);
         program.quickCreateResource("particles", "cs4621/Particles/shaders/particles.vert", "cs4621/Particles/shaders/particles.frag", null);
         
@@ -482,16 +556,16 @@ public class TestScreen extends GameScreen {
      * based on the camera's latitude, longitude, and radius from the lookAt point.
      */
     public void updateCamera() {
-    	if(rController != null && rController.env.cameras.size() > 0) {
+    	/*if(rController != null && rController.env.cameras.size() > 0) {
             RenderCamera cam = rController.env.cameras.get(cameraIndex);
             GLUniform.setST(program.getUniform("mModelViewProjection"), cam.mViewProjection, false);
             mParticleSystem.billboard(cam.mView);
-    	}
+    	}*/
         
     }
     
     public void updateParticle(GameTime gameTime) {
-        if(mParticleSystem.mPaused) return;
+        //if(mParticleSystem.mPaused) return;
         
         createParticleSystems(gameTime);
         //mParticleSystem.animate((float) gameTime.elapsed);
@@ -504,9 +578,8 @@ public class TestScreen extends GameScreen {
     		ParticleSystem sys = this.mUnusedParticleSys.poll();
         	if (fireObj != null) {
         		Vector3 pos = createParticlePos(index);
-        		sys.setPosition(pos);
-        		
-        		sys.setInitDirection(pos);
+        		sys.setPosition(pos.clone());
+        		sys.setInitDirection(pos.clone());
         	} else {
         		sys.setPosition(new Vector3((float) (-1), (float) -0.5, 0));
         		sys.setInitDirection(new Vector3(0f, 1f, 0f));
@@ -514,12 +587,26 @@ public class TestScreen extends GameScreen {
         	this.mUsingParticleSys.add(sys);
     	}
     	
+    	try{
+    		
+        	ms1.setPosition(app.scene.objects.get("Meteor").transformation.getTrans().clone());
+        	ms1.setInitDirection(v1.clone().normalize().negate());
+        	
+        	if(rController.env.cameras.size() > 0) {
+                RenderCamera cam = rController.env.cameras.get(cameraIndex);
+                ms1.animate((float) gameTime.elapsed, cam.mWorldTransform.getTrans(), true);
+        	}
+    	} catch (Exception e) {
+    		
+    	}
+    	
+    	
     	index++;
     	
         for (int i = 0; i < mUsingParticleSys.size(); i++) {
         	if(rController.env.cameras.size() > 0) {
                 RenderCamera cam = rController.env.cameras.get(cameraIndex);
-                mUsingParticleSys.get(i).animate((float) gameTime.elapsed, cam.mWorldTransform.getTrans());
+                mUsingParticleSys.get(i).animate((float) gameTime.elapsed, cam.mWorldTransform.getTrans(), false);
         	}
         	
         }
@@ -535,6 +622,8 @@ public class TestScreen extends GameScreen {
         		it.remove();
         	}
         }
+        
+        
     }
     
     private Vector3 createParticlePos(int index) {
@@ -572,12 +661,11 @@ public class TestScreen extends GameScreen {
     		phi = Math.random() * Math.PI / 2 + Math.PI / 2;
     	}
     	Vector3 offset = new Vector3(
-				(float) (Math.abs(Math.cos(theta)) * Math.sin(phi)), 
-				(float) Math.sin(theta), 
-				(float) (Math.abs(Math.cos(theta)) * Math.cos(phi))
+				(float) (1 * Math.abs(Math.cos(theta)) * Math.sin(phi)), 
+				(float) Math.sin(theta) * 1f, 
+				(float) (1 * Math.abs(Math.cos(theta)) * Math.cos(phi))
 				);
-		pos.add(offset);
-		//System.out.println(pos);
+    	pos.add(offset);
 		/*.out.println("%%%%%");
 		System.out.println(index);
 		System.out.println(theta);
@@ -590,6 +678,7 @@ public class TestScreen extends GameScreen {
     	for (int i = 0; i < mUsingParticleSys.size(); i++) {
         	drawPatricleSystem(mUsingParticleSys.get(i));
         }
+    	drawPatricleSystem(ms1);
         
         
     }

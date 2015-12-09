@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--  Stanford Bunny mesh (500 triangles, with normals)
  -->
+
+ 
 <scene>
+  <cubemap>
+    <filename>data/textures/cubemaps/kitchen_cross.pfm</filename>
+    <scaleFactor>0.1</scaleFactor> 
+  </cubemap>
   <samples>16</samples>
   <accelStruct type="Bvh" />
   <cubemap>
