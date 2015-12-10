@@ -275,27 +275,30 @@ public class TestScreen extends GameScreen {
 			for (int i = 0; i < MeteorL.length; i++) {
 				if (app.scene.objects.get(MeteorL[i]).transformation.getTrans().equals(new Vector3( 0, 0, 10)) ) {	
 					//add rotation
-					app.scene.objects.get(MeteorL[i]).transformation.set(Matrix4.createTranslation(10, 10, 10));
+					app.scene.objects.get(MeteorL[i]).transformation.set(Matrix4.createTranslation(8, 8, 8));
 					app.scene.objects.get(MeteorL[i]).addScale(new Vector3(0.002f));
 					app.scene.objects.get(MeteorL[i]).addTranslation(
-							new Vector3(5 + (float)Math.random(), 5 + (float) Math.random(), 5 + (float)Math.random()));
+							new Vector3(1 + (float)Math.random(), 1 + (float) Math.random(), 1 + (float)Math.random()));
 					System.out.println("change" + app.scene.objects.get(MeteorL[i]).transformation);
 				}
 				
 				
-				vL[i] = new Vector3(-0.005f, -0.005f, 0.006f);
+				vL[i] = new Vector3(-0.000f, -0.000f, 0.001f);
 				app.scene.objects.get(MeteorL[i]).addTranslation(vL[i].clone());
 				
 				Matrix4 trans = new Matrix4();
 				trans.set(app.scene.objects.get(MeteorL[i]).transformation.clone());
 				Matrix4 transInverse = trans.clone().invert();
 				
-				Matrix4 rotation = Matrix4.createRotationY(0.01f);
-				Matrix4 rotation2 = Matrix4.createRotationX(0.01f);
-				rotation.mulBefore(rotation2);
+				Matrix4 rotationOrbit = Matrix4.createRotationY(0.01f);
+				Matrix4 rotationX = Matrix4.createRotationX(0.01f);
+				rotationOrbit.mulBefore(rotationX);
 				Matrix4 transform = new Matrix4();
 				transform.set(transInverse);
-				transform.mulAfter(rotation).mulAfter(trans);
+				Matrix4 rotationFly = Matrix4.createRotationY(-0.001f);
+				Matrix4 rotationXX = Matrix4.createRotationX(0.001f);
+				rotationFly.mulBefore(rotationXX);
+				transform.mulAfter(rotationOrbit).mulAfter(trans).mulAfter(rotationFly);
 				app.scene.objects.get(MeteorL[i]).transformation.mulAfter(transform);
 				
 
