@@ -29,11 +29,17 @@
 		</data>
 	</texture>
   
+  	<mesh>
+	    <name>Satellite</name>
+	    <data>
+	      <file>data/meshes/Satellite.obj</file>
+	    </data>
+  	</mesh>
 
 	<texture>
 		<name>Satellite</name>
 		<data>
-			<file>data/textures/ag1.jpg</file>
+			<file>data/textures/Satellite.jpg</file>
 		</data>
 	</texture>
 
@@ -48,12 +54,13 @@
 		</data>
 	</material>
 
+
 	<object>
 		<name>Satellite</name>
 		<data>
-			<scale>0.001 0.001 0.001</scale>
+			<scale>0.1 0.1 0.1</scale>
 			<translation>-2 2 0</translation>
-			<mesh>SpaceShip</mesh>
+			<mesh>Satellite</mesh>
 			<material>SatelliteMat</material>
 		</data>
 	</object>
@@ -82,7 +89,7 @@
 	<material>
 		<name>Rock</name>
 		<data>
-			<type>Ambient</type>
+			<type>CookTorance</type>
 			<diffuse>
 				<texture>Rock</texture>
 			</diffuse>
@@ -202,25 +209,6 @@
 	</object>
 
 	<object>
-		<name>SpaceShip2</name>
-		<data>
-			<matrix>0.001 0 0 0 
-				0.0 0.001 0.0 0.0 
-				0.0 0.0 0.001 0 
-				5.0 0 1.5 1.0</matrix>
-			<mesh>SpaceShip</mesh>
-			<material>Earth1</material>
-		</data>
-	</object>
-    
-    <cubemap>
-        <name>EnvMap</name>
-        <data>
-            <file>data/textures/Envir/LancellottiChapel/</file>
-        </data>
-    </cubemap>
-
-	<object>
 		<name>Mars</name>
 		<data>
 			<matrix>.25 0 0 0 
@@ -238,6 +226,13 @@
             <file>data/textures/Envir/LancellottiChapel/</file>
         </data>
     </cubemap>
+    
+	<material>
+		<name>Mirror</name>
+		<data>
+			<type>ReflectionMap</type>
+		</data>
+	</material>
 
 	<mesh>
         <name>SkyBox.obj</name>

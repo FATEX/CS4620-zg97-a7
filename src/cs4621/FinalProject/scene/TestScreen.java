@@ -273,22 +273,34 @@ public class TestScreen extends GameScreen {
 				
 				Matrix4 trans = new Matrix4();
 				trans.set(app.scene.objects.get(MeteorL[i]).transformation.clone());
-				Matrix4 transInverse = trans.clone().invert();
+				Matrix4 rockTransInverse = trans.clone().invert();
 				
-				Matrix4 rotationOrbit = Matrix4.createRotationY(0.01f);
-				Matrix4 rotationX = Matrix4.createRotationX(0.01f);
-				rotationOrbit.mulBefore(rotationX);
-				Matrix4 transform = new Matrix4();
-				transform.set(transInverse);
-				Matrix4 rotationFly = Matrix4.createRotationY(-0.001f);
-				Matrix4 rotationXX = Matrix4.createRotationX(0.001f);
-				rotationFly.mulBefore(rotationXX);
-				transform.mulAfter(rotationOrbit).mulAfter(trans).mulAfter(rotationFly);
-				app.scene.objects.get(MeteorL[i]).transformation.mulAfter(transform);
+				Matrix4 rockRotationOrbit = Matrix4.createRotationY(0.01f);
+				Matrix4 rockRotationX = Matrix4.createRotationX(0.01f);
+				rockRotationOrbit.mulBefore(rockRotationX);
+				Matrix4 rockTransform = new Matrix4();
+				rockTransform.set(rockTransInverse);
+				Matrix4 rockRotationFy = Matrix4.createRotationY(-0.001f);
+				Matrix4 rockRotationFx = Matrix4.createRotationX(0.001f);
+				rockRotationFy.mulBefore(rockRotationFx);
+				rockTransform.mulAfter(rockRotationOrbit).mulAfter(trans).mulAfter(rockRotationFy);
+				app.scene.objects.get(MeteorL[i]).transformation.mulAfter(rockTransform);
 				
 				Matrix4 marsRotation = Matrix4.createRotationY(0.001f);
 				app.scene.objects.get("Mars").transformation.mulAfter(marsRotation);
-
+				
+				Matrix4 shipTrans = new Matrix4();
+				shipTrans.set(app.scene.objects.get("Satellite").transformation.clone());
+				Matrix4 shipTransInverse = shipTrans.clone().invert();								
+				Matrix4 shipTransform = new Matrix4();
+				shipTransform.set(shipTransInverse);
+				Matrix4 shiprotationOrbit = Matrix4.createRotationY(0.001f);
+				Matrix4 shipRotationFy = Matrix4.createRotationY(0.001f);
+				Matrix4 shipRotationFx = Matrix4.createRotationX(0.001f);
+				shipRotationFy.mulBefore(shipRotationFx);
+				shipTransform.mulAfter(shiprotationOrbit).mulAfter(shipTrans).mulAfter(shipRotationFy);
+				app.scene.objects.get("Satellite").transformation.mulAfter(shipTransform); 
+				
 			}
 		} catch (Exception e){
 			

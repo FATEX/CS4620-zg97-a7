@@ -137,6 +137,7 @@ public class ParticleSystem {
     		this.mTimeSinceLastSpawn = 0;
     		this.currentSpawn++;
     		Particle particle = this.mUnspawnedParticles.poll();
+    		if (isM) particle.setColor((double)247/255, (double)143/255, (double)7/255);
     		//(float)Math.random()*4 -2, (float)Math.random()*2 + 3, (float)Math.random()*4 - 2)
     		mDirection.normalize();
     		
