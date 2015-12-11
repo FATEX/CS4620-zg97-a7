@@ -13,9 +13,10 @@
 	      <file>data/meshes/SunGlyder.obj</file>
 	    </data>
   	</mesh>
-  
+
+  	
 	<texture>
-		<name>Earth1</name>
+		<name>SpaceShip</name>
 		<data>
 			<file>data/textures/sg3.jpg</file>
 		</data>
@@ -27,6 +28,37 @@
 			<file>data/textures/MarsMap.jpg</file>
 		</data>
 	</texture>
+  
+
+	<texture>
+		<name>Satellite</name>
+		<data>
+			<file>data/textures/ag1.jpg</file>
+		</data>
+	</texture>
+
+
+	<material>
+		<name>SatelliteMat</name>
+		<data>
+			<type>Phong</type>
+			<diffuse>
+				<texture>Satellite</texture>
+			</diffuse>
+		</data>
+	</material>
+
+	<object>
+		<name>Satellite</name>
+		<data>
+			<scale>0.001 0.001 0.001</scale>
+			<translation>-2 2 0</translation>
+			<mesh>SpaceShip</mesh>
+			<material>SatelliteMat</material>
+		</data>
+	</object>
+
+
 
 	<material>
 		<name>MarsMap</name>
@@ -37,30 +69,6 @@
 			</diffuse>
 		</data>
 	</material>
-
-	<!--<material>
-		<name>MarsMap</name>
-		<data>
-			<type>Fire</type>
-			<diffuse>
-				<texture>Fire</texture>
-			</diffuse>
-      <normal>
-        <texture>Noise</texture>
-      </normal>
-		</data>
-	</material>-->
-
-	<material>
-		<name>Earth1</name>
-		<data>
-			<type>Ambient</type>
-			<diffuse>
-				<texture>Earth1</texture>
-			</diffuse>
-		</data>
-	</material>
-
 	
 
 	<texture>
@@ -81,22 +89,13 @@
 		</data>
 	</material>
 
-	<material>
-		<name>Earth</name>
-		<data>
-			<type>Ambient</type>
-			<diffuse>
-				<texture>Earth</texture>
-			</diffuse>
-		</data>
-	</material>
 
 	<material>
-		<name>Earth1</name>
+		<name>SpaceShip</name>
 		<data>
 			<type>Ambient</type>
 			<diffuse>
-				<texture>Earth1</texture>
+				<texture>SpaceShip</texture>
 			</diffuse>
 		</data>
 	</material>
@@ -129,25 +128,6 @@
 	</material>
 	
 	
-
-	
-
-	<texture>
-		<name>Earth</name>
-		<data>
-			<file>data/textures/Earth.png</file>
-		</data>
-	</texture>
-	
-	<material>
-		<name>Earth</name>
-		<data>
-			<type>Ambient</type>
-			<diffuse>
-				<texture>Earth</texture>
-			</diffuse>
-		</data>
-	</material>
 	
 	<object>
 		<name>Meteor1</name>
@@ -217,7 +197,7 @@
 				0.0 -.25 -.55 1.0</matrix>
 			<parent>Camera</parent>
 			<mesh>SpaceShip</mesh>
-			<material>Earth1</material>
+			<material>SpaceShip</material>
 		</data>
 	</object>
 
@@ -291,23 +271,7 @@
 
 
 
-	<texture>
-		<name>EarthTexture</name>
-		<data>
-			<file>data/textures/Earth.png</file>
-		</data>
-	</texture>
-
-	<material>
-		<name>CookTorranceMaterial</name>
-		<data>
-			<type>CookTorrance</type>
-			<diffuse>
-				<color>255 0 20 255</color>
-			</diffuse>
-			<roughness>0.2</roughness>
-		</data>
-	</material>
+	
 	
 	<material>
 		<name>Ambient</name>
@@ -318,28 +282,6 @@
 			</diffuse>
 		</data>
 	</material>
-	
-	<material>
-		<name>PhongMaterial</name>
-		<data>
-			<type>Phong</type>
-			<diffuse>
-				<color>255 0 20 255</color>
-			</diffuse>
-			<shininess>50</shininess>
-		</data>
-	</material>
-
-	<object>
-		<name>Earth</name>
-		<data>
-			<mesh>Sphere</mesh>
-			<scale>0.5 0.5 0.5</scale>
-			<translation>-0.5 0 0</translation>
-			
-			<material>CookTorranceMaterial</material>
-		</data>
-	</object>
 	
 	
 
