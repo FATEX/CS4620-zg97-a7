@@ -19,26 +19,12 @@ import blister.GameTime;
 import blister.ScreenState;
 import blister.input.KeyboardEventDispatcher;
 import blister.input.KeyboardKeyEventArgs;
-import blister.input.MouseButton;
-import blister.input.MouseButtonEventArgs;
-import blister.input.MouseEventDispatcher;
-import blister.input.MouseMoveEventArgs;
-import blister.input.MouseWheelEventArgs;
 import cs4620.anim.Animator;
 import cs4620.anim.TimelineViewer;
-import cs4620.common.Material;
-import cs4620.common.Mesh;
 import cs4620.common.Scene;
 import cs4620.common.SceneObject;
-import cs4620.common.Texture;
-import cs4620.common.Scene.NameBindMaterial;
-import cs4620.common.Scene.NameBindMesh;
-import cs4620.common.Scene.NameBindTexture;
-import cs4620.common.event.SceneObjectResourceEvent;
 import cs4620.common.event.SceneReloadEvent;
-import cs4620.common.texture.TexGenCheckerBoard;
-import cs4620.common.texture.TexGenSphereNormalMap;
-import cs4620.common.texture.TexGenUVGrid;
+import cs4620.gl.CameraController;
 import cs4620.gl.GridRenderer;
 import cs4620.gl.RenderCamera;
 import cs4620.gl.RenderController;
@@ -46,7 +32,6 @@ import cs4620.gl.RenderObject;
 import cs4620.gl.Renderer;
 import cs4620.gl.manip.ManipController;
 import cs4620.mesh.MeshData;
-import cs4620.mesh.gen.MeshGenSphere;
 import cs4620.scene.SceneApp;
 import cs4620.scene.form.RPMaterialData;
 import cs4620.scene.form.RPMeshData;
@@ -92,8 +77,8 @@ public class TestScreen extends GameScreen {
 	RPTextureData dataTexture;
 	
 	RenderController rController;
-	//CameraController camController;
-	CameraUpdater camUpdater;
+	CameraController camController;
+	//CameraUpdater camUpdater;
 	ManipController manipController;
 	GridRenderer gridRenderer;
 	boolean updateAnimation;
@@ -223,7 +208,7 @@ public class TestScreen extends GameScreen {
 		
 		rController = new RenderController(app.scene, new Vector2(app.getWidth(), app.getHeight()));
 		renderer.buildPasses(rController.env.root);
-		camUpdater = new CameraUpdater(app.scene, rController.env, null);
+		camController = new CameraController(app.scene, rController.env, null);
 		createCamController();
 		manipController = new ManipController(rController.env, app.scene, app.otherWindow);
 		gridRenderer = new GridRenderer();
@@ -259,10 +244,10 @@ public class TestScreen extends GameScreen {
 	private void createCamController() {
 		if(rController.env.cameras.size() > 0) {
 			RenderCamera cam = rController.env.cameras.get(cameraIndex);
-			camUpdater.camera = cam;
+			camController.camera = cam;
 		}
 		else {
-			camUpdater.camera = null;
+			camController.camera = null;
 		}
 	}
 	
@@ -304,24 +289,6 @@ public class TestScreen extends GameScreen {
 			
 		}
 		
-		/*Mesh m = new Mesh();
-		m.setGenerator(new MeshGenSphere());
-		app.scene.addMesh(new NameBindMesh("S1", m));
-		
-		Texture t = new Texture();
-		t.setGenerator(new TexGenCheckerBoard());
-		app.scene.addTexture(new NameBindTexture("Checker Board", t));
-		
-		Material mat = new Material();
-		mat.setType(Material.T_AMBIENT);
-		app.scene.addMaterial(new NameBindMaterial("Generic", mat));
-		SceneObject s = new SceneObject();
-		s.setMesh("S1");
-		s.setMaterial("Generic");
-		s.transformation.set(Matrix4.createTranslation(0, 0, 0));
-		app.scene.objects.add(s);
-		
-		app.scene.sendEvent(new SceneObjectResourceEvent(s, SceneObjectResourceEvent.Type.Material));*/
 			
 		if(Keyboard.isKeyDown(Keyboard.KEY_EQUALS)) curCamScroll++;
 		if(Keyboard.isKeyDown(Keyboard.KEY_MINUS)) curCamScroll--;
@@ -333,9 +300,9 @@ public class TestScreen extends GameScreen {
 		}
 		prevCamScroll = curCamScroll;
 		
-		if(camUpdater.camera != null) {
-			camUpdater.update(gameTime.elapsed);
-			manipController.checkMouse(Mouse.getX(), Mouse.getY(), camUpdater.camera);
+		if(camController.camera != null) {
+			camController.update(gameTime.elapsed);
+			manipController.checkMouse(Mouse.getX(), Mouse.getY(), camController.camera);
 		}
 		
 		if(Mouse.isButtonDown(1) || Mouse.isButtonDown(0) && (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL))) {
@@ -368,10 +335,10 @@ public class TestScreen extends GameScreen {
 	public void draw(GameTime gameTime) {
 
 		
-		rController.update(renderer, camUpdater);
+		rController.update(renderer, camController);
 
-		if(pick && camUpdater.camera != null) {
-			manipController.checkPicking(renderer, camUpdater.camera, Mouse.getX(), Mouse.getY());
+		if(pick && camController.camera != null) {
+			manipController.checkPicking(renderer, camController.camera, Mouse.getX(), Mouse.getY());
 		}
 		
 		Vector3 bg = app.scene.background;
@@ -386,19 +353,19 @@ public class TestScreen extends GameScreen {
             //System.out.printf("%.2f Frames per Second\n", mFps);
         }
         
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        //GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         
         // Enable blending
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        //GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glAlphaFunc(GL11.GL_GREATER, 0.6f);
 		
-		if(camUpdater.camera != null){
-			renderer.draw(camUpdater.camera, rController.env.lights, (float) gameTime.total);
-			manipController.draw(camUpdater.camera);
+		if(camController.camera != null){
+			renderer.draw(camController.camera, rController.env.lights, (float) gameTime.total);
+			manipController.draw(camController.camera);
 			if (showGrid)
-				gridRenderer.draw(camUpdater.camera);
+				gridRenderer.draw(camController.camera);
 		}
 		
 		RenderObject co = manipController.getCurrentObject();
@@ -711,7 +678,6 @@ public class TestScreen extends GameScreen {
     private void drawPatricleSystem(ParticleSystem mParticleSystem) {
     	for(Particle p : mParticleSystem.mSpawnedParticles) {
             vBuf.rewind(); vBufWireframe.rewind();
-            
             // Get the positions of the quad for this particle.
             Vector3 particlePosition = p.getParticlePosition();
             MeshData md = p.getMeshData();

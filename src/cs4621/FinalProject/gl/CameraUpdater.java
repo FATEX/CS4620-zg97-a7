@@ -21,12 +21,17 @@ public class CameraUpdater {
 	
 	protected boolean orbitMode = false;
 	
+	private Matrix4 sT;
+	
 	public CameraUpdater(Scene s, RenderEnvironment re, RenderCamera c) {
 		scene = s;
 		rEnv = re;
 		camera = c;
 	}
 	
+	public void setSt(Matrix4 t) {
+		sT = t;
+	}
 	/**
 	 * Update the camera's transformation matrix in response to user input.
 	 * 
@@ -111,6 +116,7 @@ public class CameraUpdater {
 			mRot.mulAfter(Matrix4.createTranslation(rotCenter));
 		}
 		transformation.mulBefore(mRot);
+		//sT.mulBefore(mRot);
 		
 		// SOLUTION END
 	}
@@ -129,7 +135,7 @@ public class CameraUpdater {
 		Matrix4 mTrans = Matrix4.createTranslation(motion);
 		
 		transformation.mulBefore(mTrans);
-		
+		//sT.mulBefore(mTrans);
 		// SOLUTION END
 	}
 }
