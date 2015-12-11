@@ -203,7 +203,7 @@
 			<zPlanes>0.02 1000.0</zPlanes>
 			<perspective>0.01 0.01</perspective>
 			
-			<translation>0 0 10</translation>
+			<translation>0 0 12</translation>
 		</data>
 	</object>
 
@@ -227,7 +227,7 @@
 			<matrix>.25 0 0 0 
 				0.0 .25 0.0 0.0 
 				0.0 0.0 .25 0 
-				1.5  0.0 2.0 1.0</matrix>
+				2.5  0.0 2.5 1.0</matrix>
 			<mesh>Sphere</mesh>
 			<material>MarsMap</material>
 		</data>
@@ -353,7 +353,7 @@
 	<object>
 		<name>AmbientLight</name>
 		<data type="SceneLight">
-			<intensity>0.05 0.05 0.05</intensity>
+			<intensity>0.1 0.1 0.1</intensity>
 			<isAmbient>true</isAmbient>
 		</data>
 	</object>

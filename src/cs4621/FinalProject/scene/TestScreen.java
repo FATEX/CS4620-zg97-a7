@@ -67,7 +67,7 @@ public class TestScreen extends GameScreen {
 	boolean pick;
 	int prevCamScroll = 0;
 	boolean wasPickPressedLast = false;
-	boolean showGrid = true;
+	boolean showGrid = false;
 	boolean useTimelineMouseOver = true;
 	
 	SceneApp app;
