@@ -286,6 +286,8 @@ public class TestScreen extends GameScreen {
 				transform.mulAfter(rotationOrbit).mulAfter(trans).mulAfter(rotationFly);
 				app.scene.objects.get(MeteorL[i]).transformation.mulAfter(transform);
 				
+				Matrix4 marsRotation = Matrix4.createRotationY(0.001f);
+				app.scene.objects.get("Mars").transformation.mulAfter(marsRotation);
 
 			}
 		} catch (Exception e){
@@ -560,15 +562,16 @@ public class TestScreen extends GameScreen {
     }
     
     public void createParticleSystems(GameTime gameTime) {
-    	if (index == 16) index = 0;
+    	if (index >= 16) index = 0;
     	
-    	while (mUnusedParticleSys.size() > 0 && Math.random() > 0.99) {
+    	while (mUnusedParticleSys.size() > 0) {
     		ParticleSystem sys = this.mUnusedParticleSys.poll();
         	if (fireObj != null) {
         		Vector3 pos = createParticlePos(index);
         		sys.setPosition(pos.clone());
         		sys.setInitDirection(pos.clone());
         		sys.setRefPos(new Vector3(0));
+        		index++;
         	} else {
         		sys.setPosition(new Vector3((float) (-1), (float) -0.5, 0));
         		sys.setInitDirection(new Vector3(0f, 1f, 0f));
@@ -593,7 +596,7 @@ public class TestScreen extends GameScreen {
     	}
     	
     	
-    	index++;
+    	//index++;
     	
         for (int i = 0; i < mUsingParticleSys.size(); i++) {
         	if(rController.env.cameras.size() > 0) {
@@ -652,10 +655,17 @@ public class TestScreen extends GameScreen {
     		theta = Math.random() * Math.PI / 2 + Math.PI * 3 / 2;
     		phi = Math.random() * Math.PI / 2 + Math.PI / 2;
     	}
+    	
+    	double unitD = (double) 360 / 16;
+    	double unitT = (double) 60 / 8;
+    	phi = unitD * index * Math.PI / 180;
+    	theta = (double) unitT * index * Math.PI / 180 + Math.PI/3; 
+    	if(theta > 2 * Math.PI / 3) theta = 4 * Math.PI / 3 - theta;
+    	
     	Vector3 offset = new Vector3(
-				(float) (RADIUS * Math.abs(Math.cos(theta)) * Math.sin(phi)), 
-				(float) Math.sin(theta) * RADIUS, 
-				(float) (RADIUS * Math.abs(Math.cos(theta)) * Math.cos(phi))
+				(float) (2 * RADIUS * Math.abs(Math.sin(theta)) * Math.cos(phi)), 
+				(float) Math.cos(theta) * 2  * RADIUS, 
+				(float) ( 2 * RADIUS * Math.abs(Math.sin(theta)) * Math.sin(phi))
 				);
 		pos.add(offset);
 		//System.out.println("pos" + pos);

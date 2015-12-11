@@ -222,6 +222,25 @@
 	</object>
 
 	<object>
+		<name>SpaceShip2</name>
+		<data>
+			<matrix>0.001 0 0 0 
+				0.0 0.001 0.0 0.0 
+				0.0 0.0 0.001 0 
+				5.0 0 1.5 1.0</matrix>
+			<mesh>SpaceShip</mesh>
+			<material>Earth1</material>
+		</data>
+	</object>
+    
+    <cubemap>
+        <name>EnvMap</name>
+        <data>
+            <file>data/textures/Envir/LancellottiChapel/</file>
+        </data>
+    </cubemap>
+
+	<object>
 		<name>Mars</name>
 		<data>
 			<matrix>.25 0 0 0 
@@ -239,13 +258,6 @@
             <file>data/textures/Envir/LancellottiChapel/</file>
         </data>
     </cubemap>
-    
-	<material>
-		<name>Mirror</name>
-		<data>
-			<type>ReflectionMap</type>
-		</data>
-	</material>
 
 	<mesh>
         <name>SkyBox.obj</name>

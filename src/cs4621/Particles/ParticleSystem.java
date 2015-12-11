@@ -151,9 +151,10 @@ public class ParticleSystem {
     		Vector3 ver = new Vector3();
     		float alpha = (float) Math.random();
     		float bata  = 1 - alpha;
-    		ver.set(u.clone().mul(alpha).add(w.clone().mul(bata)));
+    		ver.set(u.clone().mul(alpha));
+    		ver.add(w.clone().mul(bata));
     		ver.normalize();
-    				
+    	   //if(mDirection.z ==1) System.out.println(ver);	
     		Vector3 velocity = new Vector3();
     		
     		double canVsparticle = mDirection.clone().dot(camT);
